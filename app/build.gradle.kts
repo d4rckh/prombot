@@ -7,6 +7,7 @@
 
 plugins {
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "6.25.0"
 }
 
@@ -28,18 +29,27 @@ dependencies {
     // https://mvnrepository.com/artifact/net.dv8tion/JDA
     implementation("net.dv8tion:JDA:5.6.1")
     
+    // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+    implementation("javax.annotation:javax.annotation-api:1.3.2")    
+    
     // https://mvnrepository.com/artifact/com.google.inject/guice
     implementation("com.google.inject:guice:7.0.0")
     
     compileOnly("org.projectlombok:lombok:1.18.28")
+    
     annotationProcessor("org.projectlombok:lombok:1.18.28")
+    
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
+    
     runtimeOnly("ch.qos.logback:logback-classic:1.4.11")
+    
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
+    
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 
@@ -59,6 +69,12 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "org.prombot.App"
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "org.prombot.App"
+    }
 }
 
 tasks.named<Test>("test") {

@@ -2,25 +2,25 @@ package org.prombot.commands;
 
 import com.google.inject.Inject;
 import lombok.Getter;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.prombot.config.YamlConfigService;
 import org.prombot.config.domain.BotConfig;
-import org.prombot.config.domain.ChannelTracking;
 import org.prombot.config.domain.NamedQuery;
+import org.prombot.prom.PromFetcher;
+import org.prombot.utils.FormatUtil;
 
-public class ShowConfigCommand implements ICommand {
-  @Inject YamlConfigService yamlConfigService;
-
+public class MetricsCommand implements ICommand {
   @Getter
-  private final CommandData commandData = Commands.slash("showconfig", "Shows current bot config");
+  private final CommandData commandData =
+      Commands.slash("metrics", "Shows all metrics and their current values.");
+
+  @Inject YamlConfigService yamlConfigService;
+  @Inject PromFetcher promFetcher;
 
   @Override
   public void handle(SlashCommandInteractionEvent event) {
-    JDA jda = event.getJDA();
     BotConfig config = yamlConfigService.getBotConfig();
 
     if (config == null || config.getMetrics() == null || config.getMetrics().isEmpty()) {
@@ -28,26 +28,13 @@ public class ShowConfigCommand implements ICommand {
       return;
     }
 
-    StringBuilder response = new StringBuilder("Configured Metrics:\n");
+    StringBuilder response = new StringBuilder("Metrics:\n");
     for (NamedQuery nq : config.getMetrics()) {
       response
           .append("- **")
           .append(nq.getName())
           .append("**: ")
-          .append(nq.getQuery())
-          .append("\n");
-    }
-
-    response.append("\nChannel tracking\n");
-    for (ChannelTracking nq : config.getTrackChannels()) {
-      GuildChannel channel = jda.getGuildChannelById(nq.getChannelId());
-
-      response
-          .append("- **")
-          .append(nq.getChannelId())
-          .append(channel == null ? " (invalid channel)" : " (valid)")
-          .append("**: ")
-          .append(nq.getName())
+          .append(FormatUtil.formatValue(promFetcher.fetchLastValue(nq.getQuery()), nq.getFormat()))
           .append("\n");
     }
 

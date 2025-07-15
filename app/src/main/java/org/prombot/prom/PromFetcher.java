@@ -2,6 +2,7 @@ package org.prombot.prom;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -14,19 +15,21 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.prombot.config.YamlConfigService;
 
 public class PromFetcher {
+  @Inject YamlConfigService yamlConfigService;
 
   private final OkHttpClient client;
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final String prometheusBaseUrl;
 
   public PromFetcher() {
-    this.prometheusBaseUrl = System.getenv("PROMETHEUS_URL");
     this.client = createUnsafeClient();
   }
 
   public Double fetchLastValue(String query) {
+    String prometheusBaseUrl = this.yamlConfigService.getBotConfig().getPrometheusUrl();
+
     try {
       HttpUrl url =
           HttpUrl.parse(prometheusBaseUrl)
@@ -55,7 +58,7 @@ public class PromFetcher {
         }
 
         JsonNode valueNode = result.get(0).path("value");
-        return Double.parseDouble(valueNode.get(1).asText());
+        return Math.floor(valueNode.get(1).asDouble() * 100) / 100;
       }
 
     } catch (Exception e) {

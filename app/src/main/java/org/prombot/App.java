@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import org.prombot.events.ReadyEventHandler;
 import org.prombot.events.SlashCommandInteractionHandler;
 import org.prombot.modules.BotModule;
+import org.prombot.modules.ChannelTrackingModule;
 import org.prombot.modules.ConfigModule;
 import org.prombot.modules.PromModule;
 
@@ -20,7 +21,10 @@ public class App {
   @Inject private ReadyEventHandler readyEventHandler;
 
   public static void main(String[] args) throws LoginException {
-    Injector injector = Guice.createInjector(new BotModule(), new PromModule(), new ConfigModule());
+    Injector injector =
+        Guice.createInjector(
+            new BotModule(), new PromModule(), new ConfigModule(), new ChannelTrackingModule());
+
     injector.getInstance(App.class).start();
   }
 

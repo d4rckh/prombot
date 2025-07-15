@@ -3,8 +3,7 @@ package org.prombot.config.domain;
 import lombok.Data;
 
 @Data
-public class NamedQuery {
-  private String query;
+public class ChannelTracking {
+  private String channelId;
   private String name;
-  private String format;
 }

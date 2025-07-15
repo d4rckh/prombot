@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import org.prombot.commands.FetchLastDoubleCommand;
 import org.prombot.commands.ICommand;
+import org.prombot.commands.MetricsCommand;
 import org.prombot.commands.PingCommand;
 import org.prombot.commands.ShowConfigCommand;
 import org.prombot.events.ReadyEventHandler;
@@ -17,6 +18,7 @@ public class BotModule extends AbstractModule {
     commandBinder.addBinding().to(PingCommand.class);
     commandBinder.addBinding().to(FetchLastDoubleCommand.class);
     commandBinder.addBinding().to(ShowConfigCommand.class);
+    commandBinder.addBinding().to(MetricsCommand.class);
 
     bind(SlashCommandInteractionHandler.class).asEagerSingleton();
     bind(ReadyEventHandler.class).asEagerSingleton();

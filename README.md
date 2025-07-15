@@ -1,4 +1,26 @@
-prometheusUrl: https://prom.andrei.lan
+# PromBot
+
+Bring your Prometheus metrics inside your Discord server!
+
+- /metrics command to view configured metrics values
+- track metrics in real time on your channel names
+
+### docker-compose.yaml
+
+```yaml
+services:
+  prombot:
+    image: ghcr.io/d4rckh/prombot:latest
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+    environment:
+      - DISCORD_TOKEN=my_token
+```
+
+### Sample config.yml
+
+```yaml
+prometheusUrl: prometheus:9090
 
 trackChannels:
   - channelId: 1394686399839731782
@@ -23,3 +45,4 @@ metrics:
   - name: Network out
     query: sum(rate(node_network_transmit_bytes_total[1m])*8)
     format: dataspeed
+```
