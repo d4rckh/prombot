@@ -1,0 +1,41 @@
+package org.prombot.config;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.prombot.config.domain.BotConfig;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class YamlConfigService {
+  private BotConfig cachedBotConfig;
+
+  public BotConfig getBotConfig() {
+    if (cachedBotConfig == null) {
+      cachedBotConfig = this.loadConfig();
+    }
+
+    return cachedBotConfig;
+  }
+
+  public BotConfig loadConfig() {
+    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+
+    try {
+      String cwd = System.getProperty("user.dir");
+      log.info("Current working directory: {}", cwd);
+      File configFile = new File(cwd, "config.yml");
+      log.info("Reading config from {}", configFile.getAbsolutePath());
+      BotConfig config = mapper.readValue(configFile, BotConfig.class);
+      return config;
+    } catch (IOException e) {
+      log.error("Failed to read file", e);
+    }
+
+    return new BotConfig();
+  }
+}

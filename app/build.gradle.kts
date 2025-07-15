@@ -21,7 +21,16 @@ dependencies {
     
     // https://mvnrepository.com/artifact/com.google.inject/guice
     implementation("com.google.inject:guice:7.0.0")
-
+    
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    // https://mvnrepository.com/artifact/org.yaml/snakeyaml
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.11")
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 
