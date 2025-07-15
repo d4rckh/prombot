@@ -1,8 +1,7 @@
 package org.prombot.modules;
 
-import org.prombot.config.YamlConfigService;
-
 import com.google.inject.AbstractModule;
+import org.prombot.config.YamlConfigService;
 
 public class ConfigModule extends AbstractModule {
 
@@ -10,5 +9,4 @@ public class ConfigModule extends AbstractModule {
   protected void configure() {
     bind(YamlConfigService.class).asEagerSingleton();
   }
-  
 }

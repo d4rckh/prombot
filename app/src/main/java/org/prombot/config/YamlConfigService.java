@@ -1,14 +1,11 @@
 package org.prombot.config;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.prombot.config.domain.BotConfig;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
+import java.io.File;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
+import org.prombot.config.domain.BotConfig;
 
 @Slf4j
 public class YamlConfigService {

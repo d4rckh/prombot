@@ -6,13 +6,22 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+}
+
+spotless {
+    java {
+        googleJavaFormat() // or prettier(), eclipse()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 dependencies {

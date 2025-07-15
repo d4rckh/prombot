@@ -1,18 +1,15 @@
 package org.prombot.prom;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,17 +28,15 @@ public class PromFetcher {
 
   public Double fetchLastValue(String query) {
     try {
-      HttpUrl url = HttpUrl.parse(prometheusBaseUrl)
-          .newBuilder()
-          .addPathSegments("api/v1/query")
-          .addQueryParameter("query", query)
-          .addQueryParameter("time", Instant.now().toString())
-          .build();
+      HttpUrl url =
+          HttpUrl.parse(prometheusBaseUrl)
+              .newBuilder()
+              .addPathSegments("api/v1/query")
+              .addQueryParameter("query", query)
+              .addQueryParameter("time", Instant.now().toString())
+              .build();
 
-      Request request = new Request.Builder()
-          .url(url)
-          .get()
-          .build();
+      Request request = new Request.Builder().url(url).get().build();
 
       try (Response response = client.newCall(request).execute()) {
         if (!response.isSuccessful()) {
@@ -70,19 +65,18 @@ public class PromFetcher {
 
   private OkHttpClient createUnsafeClient() {
     try {
-      TrustManager[] trustAllCerts = new TrustManager[] {
-          new X509TrustManager() {
-            public void checkClientTrusted(X509Certificate[] chain, String authType) {
-            }
+      TrustManager[] trustAllCerts =
+          new TrustManager[] {
+            new X509TrustManager() {
+              public void checkClientTrusted(X509Certificate[] chain, String authType) {}
 
-            public void checkServerTrusted(X509Certificate[] chain, String authType) {
-            }
+              public void checkServerTrusted(X509Certificate[] chain, String authType) {}
 
-            public X509Certificate[] getAcceptedIssuers() {
-              return new X509Certificate[0];
+              public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+              }
             }
-          }
-      };
+          };
 
       SSLContext sslContext = SSLContext.getInstance("SSL");
       sslContext.init(null, trustAllCerts, new SecureRandom());

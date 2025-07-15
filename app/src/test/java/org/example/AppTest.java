@@ -3,6 +3,4 @@
  */
 package org.example;
 
-class AppTest {
-
-}
+class AppTest {}
