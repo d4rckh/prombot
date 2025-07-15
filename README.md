@@ -20,7 +20,7 @@ services:
 ### Sample config.yml
 
 ```yaml
-prometheusUrl: prometheus:9090
+prometheusUrl: "http://prometheus:9090"
 
 trackChannels:
   - channelId: 1394686399839731782
