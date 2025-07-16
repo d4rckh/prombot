@@ -7,12 +7,14 @@ RUN gu install native-image
 
 COPY gradlew .
 COPY gradle gradle
+
+RUN chmod +x ./gradlew
+RUN ./gradlew --no-daemon --no-configuration-cache
+
 COPY settings.gradle.kts .
 COPY gradle.properties .
 
 COPY app ./app
-
-RUN chmod +x ./gradlew
 
 RUN ./gradlew :app:clean :app:nativeCompile --no-daemon --no-configuration-cache
 

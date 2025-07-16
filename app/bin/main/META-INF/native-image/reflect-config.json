@@ -372,11 +372,7 @@
     {"name":"onMessageReceived","parameterTypes":["net.dv8tion.jda.api.events.message.MessageReceivedEvent"] }, 
     {"name":"onReady","parameterTypes":["net.dv8tion.jda.api.events.session.ReadyEvent"] }, 
     {"name":"onSlashCommandInteraction","parameterTypes":["net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent"] }, 
-    {"name":"onStatusChange","parameterTypes":["net.dv8tion.jda.api.events.StatusChangeEvent"] },
-    {"name":"onChannelUpdateName","parameterTypes":["net.dv8tion.jda.api.events.channel.update.ChannelUpdateNameEvent"]},
-    {"name":"onSessionDisconnect","parameterTypes":["net.dv8tion.jda.api.events.session.SessionDisconnectEvent"]},
-    {"name":"onException","parameterTypes":["net.dv8tion.jda.api.events.ExceptionEvent"]},
-    {"name":"onGenericChannelUpdate","parameterTypes":["net.dv8tion.jda.api.events.channel.update.GenericChannelUpdateEvent"]}
+    {"name":"onStatusChange","parameterTypes":["net.dv8tion.jda.api.events.StatusChangeEvent"] }
   ]
 },
 {
