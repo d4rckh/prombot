@@ -49,7 +49,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic:1.4.12")
     
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.1")
     
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
