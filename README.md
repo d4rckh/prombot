@@ -4,8 +4,6 @@
 
 PromBot is a powerful Java-based Discord bot built with [JDA](https://github.com/DV8FromTheWorld/JDA) and compiled natively using [GraalVM](https://www.graalvm.org/) for lightning-fast performance.
 
----
-
 ## Features
 
 - 🔍 `/metrics` command — View your configured Prometheus metrics instantly.
