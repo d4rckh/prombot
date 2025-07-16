@@ -2,8 +2,8 @@ package org.prombot.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import org.prombot.commands.FetchLastDoubleCommand;
 import org.prombot.commands.Command;
+import org.prombot.commands.FetchLastDoubleCommand;
 import org.prombot.commands.MetricsCommand;
 import org.prombot.commands.PingCommand;
 import org.prombot.commands.ShowConfigCommand;

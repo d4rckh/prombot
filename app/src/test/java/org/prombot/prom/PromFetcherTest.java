@@ -16,7 +16,8 @@ class PromFetcherTest {
 
   @Test
   void testParsePromResponse_successfulResponse() {
-    String jsonResponse = """
+    String jsonResponse =
+        """
         {
           "status": "success",
           "data": {
@@ -37,23 +38,28 @@ class PromFetcherTest {
 
   @Test
   void testParsePromResponse_failureStatus() {
-    String jsonResponse = """
+    String jsonResponse =
+        """
         {
           "status": "error",
           "error": "some error message"
         }
         """;
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      promFetcher.parsePromResponse(jsonResponse);
-    });
+    RuntimeException exception =
+        assertThrows(
+            RuntimeException.class,
+            () -> {
+              promFetcher.parsePromResponse(jsonResponse);
+            });
 
     assertTrue(exception.getMessage().contains("Query failed: some error message"));
   }
 
   @Test
   void testParsePromResponse_emptyResult() {
-    String jsonResponse = """
+    String jsonResponse =
+        """
         {
           "status": "success",
           "data": {
@@ -63,9 +69,12 @@ class PromFetcherTest {
         }
         """;
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      promFetcher.parsePromResponse(jsonResponse);
-    });
+    RuntimeException exception =
+        assertThrows(
+            RuntimeException.class,
+            () -> {
+              promFetcher.parsePromResponse(jsonResponse);
+            });
 
     assertTrue(exception.getMessage().contains("No data returned for query"));
   }
@@ -74,9 +83,12 @@ class PromFetcherTest {
   void testParsePromResponse_invalidJson() {
     String invalidJson = "not a json";
 
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-      promFetcher.parsePromResponse(invalidJson);
-    });
+    RuntimeException exception =
+        assertThrows(
+            RuntimeException.class,
+            () -> {
+              promFetcher.parsePromResponse(invalidJson);
+            });
 
     assertTrue(exception.getMessage().contains("Failed to parse response"));
   }

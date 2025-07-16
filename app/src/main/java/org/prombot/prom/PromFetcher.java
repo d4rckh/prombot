@@ -18,8 +18,7 @@ import okhttp3.Response;
 import org.prombot.config.YamlConfigService;
 
 public class PromFetcher {
-  @Inject
-  YamlConfigService yamlConfigService;
+  @Inject YamlConfigService yamlConfigService;
 
   private final OkHttpClient client;
   private final ObjectMapper objectMapper = new ObjectMapper();
@@ -52,12 +51,13 @@ public class PromFetcher {
   public Double fetchLastValue(String query) {
     String prometheusBaseUrl = this.yamlConfigService.getBotConfig().getPrometheusUrl();
 
-    HttpUrl url = HttpUrl.parse(prometheusBaseUrl)
-        .newBuilder()
-        .addPathSegments("api/v1/query")
-        .addQueryParameter("query", query)
-        .addQueryParameter("time", Instant.now().toString())
-        .build();
+    HttpUrl url =
+        HttpUrl.parse(prometheusBaseUrl)
+            .newBuilder()
+            .addPathSegments("api/v1/query")
+            .addQueryParameter("query", query)
+            .addQueryParameter("time", Instant.now().toString())
+            .build();
 
     Request request = new Request.Builder().url(url).get().build();
 
@@ -73,19 +73,18 @@ public class PromFetcher {
 
   private OkHttpClient createUnsafeClient() {
     try {
-      TrustManager[] trustAllCerts = new TrustManager[] {
-          new X509TrustManager() {
-            public void checkClientTrusted(X509Certificate[] chain, String authType) {
-            }
+      TrustManager[] trustAllCerts =
+          new TrustManager[] {
+            new X509TrustManager() {
+              public void checkClientTrusted(X509Certificate[] chain, String authType) {}
 
-            public void checkServerTrusted(X509Certificate[] chain, String authType) {
-            }
+              public void checkServerTrusted(X509Certificate[] chain, String authType) {}
 
-            public X509Certificate[] getAcceptedIssuers() {
-              return new X509Certificate[0];
+              public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+              }
             }
-          }
-      };
+          };
 
       SSLContext sslContext = SSLContext.getInstance("SSL");
       sslContext.init(null, trustAllCerts, new SecureRandom());
