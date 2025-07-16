@@ -1,6 +1,6 @@
 # PromBot
 
-Bring your Prometheus metrics inside your Discord server!
+Bring your Prometheus metrics inside your Discord server! Written in Java using JDA and compiled natively using GraalVM
 
 - /metrics command to view configured metrics values
 - track metrics in real time on your channel names

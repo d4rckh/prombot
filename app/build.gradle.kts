@@ -6,6 +6,7 @@
  */
 
 plugins {
+    id("org.graalvm.buildtools.native") version "0.10.6"
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "6.25.0"
@@ -63,6 +64,15 @@ dependencies {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            imageName.set("prombot")
+            mainClass.set("org.prombot.App")
+        }
     }
 }
 
