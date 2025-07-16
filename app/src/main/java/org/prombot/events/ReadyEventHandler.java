@@ -10,11 +10,11 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.prombot.channeltracking.ChannelTrackingService;
-import org.prombot.commands.ICommand;
+import org.prombot.commands.Command;
 
 @Slf4j
 public class ReadyEventHandler extends ListenerAdapter {
-  @Inject private Set<ICommand> commands;
+  @Inject private Set<Command> commands;
   @Inject ChannelTrackingService channelTrackingService;
 
   @Override

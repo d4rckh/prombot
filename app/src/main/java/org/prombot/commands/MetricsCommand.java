@@ -11,7 +11,7 @@ import org.prombot.config.domain.NamedQuery;
 import org.prombot.prom.PromFetcher;
 import org.prombot.utils.FormatUtil;
 
-public class MetricsCommand implements ICommand {
+public class MetricsCommand implements Command {
   @Getter
   private final CommandData commandData =
       Commands.slash("metrics", "Shows all metrics and their current values.");

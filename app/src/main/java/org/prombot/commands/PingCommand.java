@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class PingCommand implements ICommand {
+public class PingCommand implements Command {
   @Getter private final CommandData commandData = Commands.slash("ping", "Replies with pong!");
 
   @Override

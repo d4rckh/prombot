@@ -12,7 +12,7 @@ import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.ChannelTracking;
 import org.prombot.config.domain.NamedQuery;
 
-public class ShowConfigCommand implements ICommand {
+public class ShowConfigCommand implements Command {
   @Inject YamlConfigService yamlConfigService;
 
   @Getter

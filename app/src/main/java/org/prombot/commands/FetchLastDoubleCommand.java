@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.prombot.prom.PromFetcher;
 
-public class FetchLastDoubleCommand implements ICommand {
+public class FetchLastDoubleCommand implements Command {
   @Getter
   private final CommandData commandData =
       Commands.slash("fetchlastdouble", "Fetches the last double")

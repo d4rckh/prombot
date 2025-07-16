@@ -352,7 +352,32 @@
   "name":"net.dv8tion.jda.api.hooks.ListenerAdapter",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "allDeclaredMethods":true
+  "methods":[
+    {"name":"onChannelCreate","parameterTypes":["net.dv8tion.jda.api.events.channel.ChannelCreateEvent"] }, 
+    {"name":"onChannelDelete","parameterTypes":["net.dv8tion.jda.api.events.channel.ChannelDeleteEvent"] }, 
+    {"name":"onGatewayPing","parameterTypes":["net.dv8tion.jda.api.events.GatewayPingEvent"] }, 
+    {"name":"onGenericChannel","parameterTypes":["net.dv8tion.jda.api.events.channel.GenericChannelEvent"] }, 
+    {"name":"onGenericCommandInteraction","parameterTypes":["net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent"] }, 
+    {"name":"onGenericGuild","parameterTypes":["net.dv8tion.jda.api.events.guild.GenericGuildEvent"] }, 
+    {"name":"onGenericInteractionCreate","parameterTypes":["net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent"] }, 
+    {"name":"onGenericMessage","parameterTypes":["net.dv8tion.jda.api.events.message.GenericMessageEvent"] }, 
+    {"name":"onGenericMessageReaction","parameterTypes":["net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent"] }, 
+    {"name":"onGenericSession","parameterTypes":["net.dv8tion.jda.api.events.session.GenericSessionEvent"] }, 
+    {"name":"onGuildAuditLogEntryCreate","parameterTypes":["net.dv8tion.jda.api.events.guild.GuildAuditLogEntryCreateEvent"] }, 
+    {"name":"onGuildReady","parameterTypes":["net.dv8tion.jda.api.events.guild.GuildReadyEvent"] }, 
+    {"name":"onHttpRequest","parameterTypes":["net.dv8tion.jda.api.events.http.HttpRequestEvent"] }, 
+    {"name":"onMessageDelete","parameterTypes":["net.dv8tion.jda.api.events.message.MessageDeleteEvent"] }, 
+    {"name":"onMessageReactionAdd","parameterTypes":["net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent"] }, 
+    {"name":"onMessageReactionRemove","parameterTypes":["net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent"] }, 
+    {"name":"onMessageReceived","parameterTypes":["net.dv8tion.jda.api.events.message.MessageReceivedEvent"] }, 
+    {"name":"onReady","parameterTypes":["net.dv8tion.jda.api.events.session.ReadyEvent"] }, 
+    {"name":"onSlashCommandInteraction","parameterTypes":["net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent"] }, 
+    {"name":"onStatusChange","parameterTypes":["net.dv8tion.jda.api.events.StatusChangeEvent"] },
+    {"name":"onChannelUpdateName","parameterTypes":["net.dv8tion.jda.api.events.channel.update.ChannelUpdateNameEvent"]},
+    {"name":"onSessionDisconnect","parameterTypes":["net.dv8tion.jda.api.events.session.SessionDisconnectEvent"]},
+    {"name":"onException","parameterTypes":["net.dv8tion.jda.api.events.ExceptionEvent"]},
+    {"name":"onGenericChannelUpdate","parameterTypes":["net.dv8tion.jda.api.events.channel.update.GenericChannelUpdateEvent"]}
+  ]
 },
 {
   "name":"net.dv8tion.jda.internal.utils.FallbackLogger",

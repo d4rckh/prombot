@@ -18,7 +18,8 @@ import okhttp3.Response;
 import org.prombot.config.YamlConfigService;
 
 public class PromFetcher {
-  @Inject YamlConfigService yamlConfigService;
+  @Inject
+  YamlConfigService yamlConfigService;
 
   private final OkHttpClient client;
   private final ObjectMapper objectMapper = new ObjectMapper();
@@ -27,59 +28,64 @@ public class PromFetcher {
     this.client = createUnsafeClient();
   }
 
+  double parsePromResponse(String responseBody) {
+    try {
+      JsonNode root = objectMapper.readTree(responseBody);
+
+      if (!"success".equals(root.path("status").asText())) {
+        throw new RuntimeException("Query failed: " + root.path("error").asText());
+      }
+
+      JsonNode result = root.path("data").path("result");
+      if (!result.isArray() || result.isEmpty()) {
+        throw new RuntimeException("No data returned for query");
+      }
+
+      JsonNode valueNode = result.get(0).path("value");
+
+      return Math.floor(valueNode.get(1).asDouble() * 100) / 100;
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to parse response from prometheus: " + e.getMessage(), e);
+    }
+  }
+
   public Double fetchLastValue(String query) {
     String prometheusBaseUrl = this.yamlConfigService.getBotConfig().getPrometheusUrl();
 
-    try {
-      HttpUrl url =
-          HttpUrl.parse(prometheusBaseUrl)
-              .newBuilder()
-              .addPathSegments("api/v1/query")
-              .addQueryParameter("query", query)
-              .addQueryParameter("time", Instant.now().toString())
-              .build();
+    HttpUrl url = HttpUrl.parse(prometheusBaseUrl)
+        .newBuilder()
+        .addPathSegments("api/v1/query")
+        .addQueryParameter("query", query)
+        .addQueryParameter("time", Instant.now().toString())
+        .build();
 
-      Request request = new Request.Builder().url(url).get().build();
+    Request request = new Request.Builder().url(url).get().build();
 
-      try (Response response = client.newCall(request).execute()) {
-        if (!response.isSuccessful()) {
-          throw new IOException("Unexpected HTTP code " + response.code());
-        }
-
-        JsonNode root = objectMapper.readTree(response.body().string());
-
-        if (!"success".equals(root.path("status").asText())) {
-          throw new RuntimeException("Query failed: " + root.path("error").asText());
-        }
-
-        JsonNode result = root.path("data").path("result");
-        if (!result.isArray() || result.isEmpty()) {
-          throw new RuntimeException("No data returned for query");
-        }
-
-        JsonNode valueNode = result.get(0).path("value");
-        return Math.floor(valueNode.get(1).asDouble() * 100) / 100;
+    try (Response response = client.newCall(request).execute()) {
+      if (!response.isSuccessful()) {
+        throw new IOException("Unexpected HTTP code " + response.code());
       }
-
-    } catch (Exception e) {
+      return this.parsePromResponse(response.body().string());
+    } catch (IOException e) {
       throw new RuntimeException("Failed to fetch from Prometheus: " + e.getMessage(), e);
     }
   }
 
   private OkHttpClient createUnsafeClient() {
     try {
-      TrustManager[] trustAllCerts =
-          new TrustManager[] {
-            new X509TrustManager() {
-              public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-
-              public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-
-              public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-              }
+      TrustManager[] trustAllCerts = new TrustManager[] {
+          new X509TrustManager() {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
             }
-          };
+
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            public X509Certificate[] getAcceptedIssuers() {
+              return new X509Certificate[0];
+            }
+          }
+      };
 
       SSLContext sslContext = SSLContext.getInstance("SSL");
       sslContext.init(null, trustAllCerts, new SecureRandom());
