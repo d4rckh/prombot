@@ -44,7 +44,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:5.1.0")
     
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.1")
     
     runtimeOnly("ch.qos.logback:logback-classic:1.4.12")
     
