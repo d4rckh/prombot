@@ -46,7 +46,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
     
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.11")
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.12")
     
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
