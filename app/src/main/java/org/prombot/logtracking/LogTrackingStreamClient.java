@@ -25,13 +25,15 @@ public class LogTrackingStreamClient extends WebSocketClient {
 
   private final List<String> logBuffer = new CopyOnWriteArrayList<>();
 
+  private final Runnable onClose;
+
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-  public LogTrackingStreamClient(JDA jda, LogTracking logTracking) {
+  public LogTrackingStreamClient(JDA jda, LogTracking logTracking, Runnable onClose) {
     super(buildWebSocketUrl(logTracking));
     this.textChannel = jda.getTextChannelById(logTracking.getChannelId());
     this.startupNano = Instant.now().toEpochMilli() * 1_000_000L;
-
+    this.onClose = onClose;
     scheduler.scheduleAtFixedRate(this::flushLogsToDiscord, 5, 10, TimeUnit.SECONDS);
   }
 
@@ -118,6 +120,7 @@ public class LogTrackingStreamClient extends WebSocketClient {
   public void onClose(int code, String reason, boolean remote) {
     log.warn("Loki WebSocket closed: {}", reason);
     scheduler.shutdownNow();
+    this.onClose.run();
   }
 
   @Override
