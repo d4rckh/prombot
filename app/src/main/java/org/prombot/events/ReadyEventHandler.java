@@ -11,11 +11,13 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.prombot.channeltracking.ChannelTrackingService;
 import org.prombot.commands.Command;
+import org.prombot.logtracking.LogTrackingService;
 
 @Slf4j
 public class ReadyEventHandler extends ListenerAdapter {
   @Inject private Set<Command> commands;
   @Inject ChannelTrackingService channelTrackingService;
+  @Inject LogTrackingService logTrackingService;
 
   @Override
   public void onReady(ReadyEvent event) {
@@ -44,5 +46,6 @@ public class ReadyEventHandler extends ListenerAdapter {
             error -> log.error("Failed to register globals commands", error));
 
     channelTrackingService.startTracking(jda);
+    logTrackingService.startTracking(jda);
   }
 }

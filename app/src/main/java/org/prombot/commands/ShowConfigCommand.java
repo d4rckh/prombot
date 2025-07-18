@@ -28,7 +28,12 @@ public class ShowConfigCommand implements Command {
       return;
     }
 
-    StringBuilder response = new StringBuilder("Configured Metrics:\n");
+    StringBuilder response = new StringBuilder("-- Config --\n");
+
+    response.append("Prometheus URL: ");
+    response.append(config.getPrometheusUrl());
+
+    response.append("\n\nConfigured Metrics\n");
     for (NamedQuery nq : config.getMetrics()) {
       response
           .append("- **")

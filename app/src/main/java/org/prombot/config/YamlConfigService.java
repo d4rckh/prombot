@@ -33,6 +33,6 @@ public class YamlConfigService {
       log.error("Failed to read file", e);
     }
 
-    return new BotConfig();
+    return BotConfig.builder().build();
   }
 }

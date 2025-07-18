@@ -8,6 +8,7 @@ PromBot is a powerful Java-based Discord bot built with [JDA](https://github.com
 
 - 🔍 `/metrics` command — View your configured Prometheus metrics instantly.
 - 📊 Real-time tracking — Automatically update your Discord **channel names** with live metric values.
+- 🗒️ Real-time log streaming - Connect Loki to your text channels.
 - ⚙️ Easy configuration — Simple YAML setup to define metrics and tracked channels.
 
 ### docker-compose.yaml
@@ -50,4 +51,12 @@ metrics:
   - name: Network out
     query: sum(rate(node_network_transmit_bytes_total[1m])*8)
     format: dataspeed
+
+logTracking:
+  - channelId: 1395816967981633668
+    lokiInstance: loki:3100
+    query: >
+      {job="caddy"}
+      | json
+      | line_format "{{.ts}} | {{.request_method}} | {{.request_remote_ip}} -> {{.request_host}} | {{.status}} | {{.duration}}s | {{.user_agent}}"
 ```

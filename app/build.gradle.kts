@@ -46,6 +46,7 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.38")
 
+    implementation("org.java-websocket:Java-WebSocket:1.6.0")
     implementation("ch.qos.logback:logback-classic:1.5.18")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.1")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.1")
@@ -59,6 +60,9 @@ dependencies {
 
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.11.0")
 }
 
 java {
