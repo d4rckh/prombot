@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import org.prombot.config.YamlConfigService;
@@ -16,8 +17,11 @@ import org.prombot.config.domain.LogTracking;
 public class LogTrackingService {
   @Inject private YamlConfigService yamlConfigService;
 
-  private final List<LogTrackingStreamClient> logTrackingStreamClients = new ArrayList<>();
+  @Inject private LogTrackingStreamClientFactory logTrackingStreamClientFactory;
 
+  @Getter
+  private final List<LogTrackingStreamClient> logTrackingStreamClients = new ArrayList<>();
+  
   public void startTracking(JDA jda) {
     BotConfig botConfig = yamlConfigService.getBotConfig();
 
@@ -29,7 +33,7 @@ public class LogTrackingService {
   }
 
   private void createAndConnectClient(JDA jda, LogTracking logTracking) {
-    LogTrackingStreamClient client = new LogTrackingStreamClient(jda, logTracking, () -> reconnect(jda, logTracking));
+    LogTrackingStreamClient client = logTrackingStreamClientFactory.create(jda, logTracking, () -> reconnect(jda, logTracking));
     logTrackingStreamClients.add(client);
     client.connect();
   }
