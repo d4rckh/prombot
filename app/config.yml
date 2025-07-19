@@ -25,6 +25,10 @@ metrics:
     format: dataspeed
 
 logTracking:
+  - lokiInstance: 192.168.0.162:3100
+    channelId: 1395864830426091573
+    query: >
+      {job="docker"}
   - channelId: 1395816967981633668
     lokiInstance: 192.168.0.162:3100
     query: >

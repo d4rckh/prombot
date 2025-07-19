@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,14 @@ public class LogTrackingStreamClient extends WebSocketClient {
   private final long startupNano;
   private final TextChannel textChannel;
 
+  // todo: move this inside org.prombot.logtracking.LogTrackingService
   private final List<String> logBuffer = new CopyOnWriteArrayList<>();
 
   private final Runnable onClose;
+  
+  private final Duration maxAgeClient;
+  
+  private Instant opennedAt; 
 
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -34,6 +40,8 @@ public class LogTrackingStreamClient extends WebSocketClient {
     this.textChannel = jda.getTextChannelById(logTracking.getChannelId());
     this.startupNano = Instant.now().toEpochMilli() * 1_000_000L;
     this.onClose = onClose;
+    this.maxAgeClient = logTracking.getServerMaxDuration();
+
     scheduler.scheduleAtFixedRate(this::flushLogsToDiscord, 5, 10, TimeUnit.SECONDS);
   }
 
@@ -50,6 +58,7 @@ public class LogTrackingStreamClient extends WebSocketClient {
   @Override
   public void onOpen(ServerHandshake handshakedata) {
     log.info("Connected to Loki WebSocket @ {}", this.getURI());
+    this.opennedAt = Instant.now();
   }
 
   @Override
@@ -113,6 +122,10 @@ public class LogTrackingStreamClient extends WebSocketClient {
     if (chunk.length() > 4) {
       chunk.append("```");
       textChannel.sendMessage(chunk.toString()).queue();
+    }
+
+    if (Duration.between(opennedAt, Instant.now()).toMillis() > (this.maxAgeClient.toMillis() - 15000)) {
+      this.close(1012 /* Service REstart */, "Closing client before server max tail duration.");
     }
   }
 
