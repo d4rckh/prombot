@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NamedQuery {
-  private String query;
-  private String name;
-  private String format;
+    private String query;
+    private String name;
+    private String format;
 }

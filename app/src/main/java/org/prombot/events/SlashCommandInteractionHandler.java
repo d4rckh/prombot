@@ -7,16 +7,16 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.prombot.commands.Command;
 
 public class SlashCommandInteractionHandler extends ListenerAdapter {
-  @Inject private Set<Command> commands;
+    @Inject
+    private Set<Command> commands;
 
-  @Override
-  public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-    commands.stream()
-        .filter(a -> a.getCommandData().getName().equals(event.getName()))
-        .findFirst()
-        .ifPresent(
-            (c) -> {
-              c.handle(event);
-            });
-  }
+    @Override
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        commands.stream()
+                .filter(a -> a.getCommandData().getName().equals(event.getName()))
+                .findFirst()
+                .ifPresent((c) -> {
+                    c.handle(event);
+                });
+    }
 }

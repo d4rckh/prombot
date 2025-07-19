@@ -17,63 +17,64 @@ import org.prombot.utils.FormatUtil;
 
 @Slf4j
 public class ChannelTrackingService {
-  @Inject YamlConfigService yamlConfigService;
+    @Inject
+    YamlConfigService yamlConfigService;
 
-  @Inject PromFetcher promFetcher;
+    @Inject
+    PromFetcher promFetcher;
 
-  private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-  public void startTracking(JDA jda) {
-    BotConfig botConfig = yamlConfigService.getBotConfig();
+    public void startTracking(JDA jda) {
+        BotConfig botConfig = yamlConfigService.getBotConfig();
 
-    List<ChannelTracking> trackChannels = yamlConfigService.getBotConfig().getTrackChannels();
+        List<ChannelTracking> trackChannels = yamlConfigService.getBotConfig().getTrackChannels();
 
-    executor.scheduleAtFixedRate(
-        () -> {
-          try {
-            for (ChannelTracking channelTracking : trackChannels) {
-              String channelId = channelTracking.getChannelId();
-              String nameTemplate = channelTracking.getName();
+        executor.scheduleAtFixedRate(
+                () -> {
+                    try {
+                        for (ChannelTracking channelTracking : trackChannels) {
+                            String channelId = channelTracking.getChannelId();
+                            String nameTemplate = channelTracking.getName();
 
-              StringBuilder updatedNameBuilder = new StringBuilder(nameTemplate);
+                            StringBuilder updatedNameBuilder = new StringBuilder(nameTemplate);
 
-              for (NamedQuery metric : botConfig.getMetrics()) {
-                String placeholder = "{" + metric.getName() + "}";
+                            for (NamedQuery metric : botConfig.getMetrics()) {
+                                String placeholder = "{" + metric.getName() + "}";
 
-                int index = updatedNameBuilder.indexOf(placeholder);
+                                int index = updatedNameBuilder.indexOf(placeholder);
 
-                if (index != -1) {
-                  Double value = promFetcher.fetchLastValue(metric.getQuery());
-                  String valueStr =
-                      value == null
-                          ? "N/A"
-                          : FormatUtil.formatValue(
-                              promFetcher.fetchLastValue(metric.getQuery()), metric.getFormat());
+                                if (index != -1) {
+                                    Double value = promFetcher.fetchLastValue(metric.getQuery());
+                                    String valueStr = value == null
+                                            ? "N/A"
+                                            : FormatUtil.formatValue(
+                                                    promFetcher.fetchLastValue(metric.getQuery()), metric.getFormat());
 
-                  updatedNameBuilder.replace(index, index + placeholder.length(), valueStr);
-                }
-              }
+                                    updatedNameBuilder.replace(index, index + placeholder.length(), valueStr);
+                                }
+                            }
 
-              String updatedName = updatedNameBuilder.toString();
+                            String updatedName = updatedNameBuilder.toString();
 
-              GuildChannel channel = jda.getGuildChannelById(channelId);
-              if (channel != null) {
-                String currentName = channel.getName();
+                            GuildChannel channel = jda.getGuildChannelById(channelId);
+                            if (channel != null) {
+                                String currentName = channel.getName();
 
-                if (!currentName.equals(updatedName))
-                  channel.getManager().setName(updatedName).queue();
-              } else log.warn("Channel ID {} not found in guild", channelId);
-            }
-          } catch (Exception e) {
-            log.error("Error in channel tracking task", e);
-          }
-        },
-        0,
-        15,
-        TimeUnit.MINUTES);
-  }
+                                if (!currentName.equals(updatedName))
+                                    channel.getManager().setName(updatedName).queue();
+                            } else log.warn("Channel ID {} not found in guild", channelId);
+                        }
+                    } catch (Exception e) {
+                        log.error("Error in channel tracking task", e);
+                    }
+                },
+                0,
+                15,
+                TimeUnit.MINUTES);
+    }
 
-  public void stopTracking() {
-    executor.shutdown();
-  }
+    public void stopTracking() {
+        executor.shutdown();
+    }
 }

@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 
 class PromFetcherTest {
 
-  private PromFetcher promFetcher;
+    private PromFetcher promFetcher;
 
-  @BeforeEach
-  void setUp() {
-    promFetcher = new PromFetcher();
-  }
+    @BeforeEach
+    void setUp() {
+        promFetcher = new PromFetcher();
+    }
 
-  @Test
-  void testParsePromResponse_successfulResponse() {
-    String jsonResponse =
-        """
+    @Test
+    void testParsePromResponse_successfulResponse() {
+        String jsonResponse =
+                """
 				{
 				  "status": "success",
 				  "data": {
@@ -32,34 +32,30 @@ class PromFetcherTest {
 				}
 				""";
 
-    double result = promFetcher.parsePromResponse(jsonResponse);
-    assertEquals(42.67, result);
-  }
+        double result = promFetcher.parsePromResponse(jsonResponse);
+        assertEquals(42.67, result);
+    }
 
-  @Test
-  void testParsePromResponse_failureStatus() {
-    String jsonResponse =
-        """
+    @Test
+    void testParsePromResponse_failureStatus() {
+        String jsonResponse = """
 				{
 				  "status": "error",
 				  "error": "some error message"
 				}
 				""";
 
-    RuntimeException exception =
-        assertThrows(
-            RuntimeException.class,
-            () -> {
-              promFetcher.parsePromResponse(jsonResponse);
-            });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            promFetcher.parsePromResponse(jsonResponse);
+        });
 
-    assertTrue(exception.getMessage().contains("Query failed: some error message"));
-  }
+        assertTrue(exception.getMessage().contains("Query failed: some error message"));
+    }
 
-  @Test
-  void testParsePromResponse_emptyResult() {
-    String jsonResponse =
-        """
+    @Test
+    void testParsePromResponse_emptyResult() {
+        String jsonResponse =
+                """
 				{
 				  "status": "success",
 				  "data": {
@@ -69,27 +65,21 @@ class PromFetcherTest {
 				}
 				""";
 
-    RuntimeException exception =
-        assertThrows(
-            RuntimeException.class,
-            () -> {
-              promFetcher.parsePromResponse(jsonResponse);
-            });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            promFetcher.parsePromResponse(jsonResponse);
+        });
 
-    assertTrue(exception.getMessage().contains("No data returned for query"));
-  }
+        assertTrue(exception.getMessage().contains("No data returned for query"));
+    }
 
-  @Test
-  void testParsePromResponse_invalidJson() {
-    String invalidJson = "not a json";
+    @Test
+    void testParsePromResponse_invalidJson() {
+        String invalidJson = "not a json";
 
-    RuntimeException exception =
-        assertThrows(
-            RuntimeException.class,
-            () -> {
-              promFetcher.parsePromResponse(invalidJson);
-            });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            promFetcher.parsePromResponse(invalidJson);
+        });
 
-    assertTrue(exception.getMessage().contains("Failed to parse response"));
-  }
+        assertTrue(exception.getMessage().contains("Failed to parse response"));
+    }
 }

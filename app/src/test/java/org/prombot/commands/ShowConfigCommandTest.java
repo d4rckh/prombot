@@ -23,65 +23,72 @@ import org.prombot.config.domain.ChannelTracking;
 import org.prombot.config.domain.NamedQuery;
 
 class ShowConfigCommandTest {
-  @Mock private YamlConfigService yamlConfigService;
+    @Mock
+    private YamlConfigService yamlConfigService;
 
-  @Mock private JDA jda;
+    @Mock
+    private JDA jda;
 
-  @Mock private SlashCommandInteractionEvent slashCommandInteractionEvent;
+    @Mock
+    private SlashCommandInteractionEvent slashCommandInteractionEvent;
 
-  @Mock private InteractionHook interactionHook;
+    @Mock
+    private InteractionHook interactionHook;
 
-  @InjectMocks private ShowConfigCommand command;
+    @InjectMocks
+    private ShowConfigCommand command;
 
-  @Mock private OptionMapping optionMapping;
+    @Mock
+    private OptionMapping optionMapping;
 
-  @Captor private ArgumentCaptor<String> replyTextArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<String> replyTextArgumentCaptor;
 
-  @Mock private ReplyCallbackAction replyCallbackAction;
+    @Mock
+    private ReplyCallbackAction replyCallbackAction;
 
-  @BeforeEach
-  void setUp() {
-    MockitoAnnotations.openMocks(this);
-  }
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-  @Test
-  void testHandleWithValidConfig_shouldReplyWithCorrectValues() {
-    NamedQuery cpuUsageQuery = new NamedQuery("cpu_usage_query", "CPU Usage", "percentage");
-    ChannelTracking channelTracking = new ChannelTracking("123456", "Test name 123");
+    @Test
+    void testHandleWithValidConfig_shouldReplyWithCorrectValues() {
+        NamedQuery cpuUsageQuery = new NamedQuery("cpu_usage_query", "CPU Usage", "percentage");
+        ChannelTracking channelTracking = new ChannelTracking("123456", "Test name 123");
 
-    GuildChannel guildChannelMock = mock(GuildChannel.class);
+        GuildChannel guildChannelMock = mock(GuildChannel.class);
 
-    BotConfig botConfig =
-        BotConfig.builder()
-            .metrics(List.of(cpuUsageQuery))
-            .trackChannels(List.of(channelTracking))
-            .prometheusUrl("http://test_url")
-            .build();
+        BotConfig botConfig = BotConfig.builder()
+                .metrics(List.of(cpuUsageQuery))
+                .trackChannels(List.of(channelTracking))
+                .prometheusUrl("http://test_url")
+                .build();
 
-    when(this.yamlConfigService.getBotConfig()).thenReturn(botConfig);
-    when(this.slashCommandInteractionEvent.reply(anyString())).thenReturn(this.replyCallbackAction);
-    when(this.slashCommandInteractionEvent.getJDA()).thenReturn(this.jda);
-    when(this.jda.getGuildChannelById(channelTracking.getChannelId())).thenReturn(guildChannelMock);
+        when(this.yamlConfigService.getBotConfig()).thenReturn(botConfig);
+        when(this.slashCommandInteractionEvent.reply(anyString())).thenReturn(this.replyCallbackAction);
+        when(this.slashCommandInteractionEvent.getJDA()).thenReturn(this.jda);
+        when(this.jda.getGuildChannelById(channelTracking.getChannelId())).thenReturn(guildChannelMock);
 
-    command.handle(slashCommandInteractionEvent);
+        command.handle(slashCommandInteractionEvent);
 
-    verify(this.slashCommandInteractionEvent).reply(replyTextArgumentCaptor.capture());
-    verify(this.replyCallbackAction).queue();
+        verify(this.slashCommandInteractionEvent).reply(replyTextArgumentCaptor.capture());
+        verify(this.replyCallbackAction).queue();
 
-    assertTrue(
-        this.replyTextArgumentCaptor.getValue().contains(botConfig.getPrometheusUrl()),
-        "reply does not contain prometheus url");
-    assertTrue(
-        this.replyTextArgumentCaptor.getValue().contains(cpuUsageQuery.getName()),
-        "reply does not contain query name");
-    assertTrue(
-        this.replyTextArgumentCaptor.getValue().contains(cpuUsageQuery.getQuery()),
-        "reply does not contain query");
-    assertTrue(
-        this.replyTextArgumentCaptor.getValue().contains(channelTracking.getChannelId()),
-        "reply does not contain channel id");
-    assertTrue(
-        this.replyTextArgumentCaptor.getValue().contains(channelTracking.getName()),
-        "reply does not contain channel tracking name");
-  }
+        assertTrue(
+                this.replyTextArgumentCaptor.getValue().contains(botConfig.getPrometheusUrl()),
+                "reply does not contain prometheus url");
+        assertTrue(
+                this.replyTextArgumentCaptor.getValue().contains(cpuUsageQuery.getName()),
+                "reply does not contain query name");
+        assertTrue(
+                this.replyTextArgumentCaptor.getValue().contains(cpuUsageQuery.getQuery()),
+                "reply does not contain query");
+        assertTrue(
+                this.replyTextArgumentCaptor.getValue().contains(channelTracking.getChannelId()),
+                "reply does not contain channel id");
+        assertTrue(
+                this.replyTextArgumentCaptor.getValue().contains(channelTracking.getName()),
+                "reply does not contain channel tracking name");
+    }
 }

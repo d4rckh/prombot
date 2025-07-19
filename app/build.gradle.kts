@@ -14,7 +14,7 @@ repositories {
 
 spotless {
     java {
-        googleJavaFormat()
+        palantirJavaFormat()
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()

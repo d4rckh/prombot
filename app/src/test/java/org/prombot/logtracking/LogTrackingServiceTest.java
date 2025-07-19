@@ -19,67 +19,68 @@ import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.LogTracking;
 
 public class LogTrackingServiceTest {
-  @Mock YamlConfigService yamlConfigService;
+    @Mock
+    YamlConfigService yamlConfigService;
 
-  @Mock LogTrackingStreamClientFactory logTrackingStreamClientFactory;
+    @Mock
+    LogTrackingStreamClientFactory logTrackingStreamClientFactory;
 
-  @InjectMocks LogTrackingService logTrackingService;
+    @InjectMocks
+    LogTrackingService logTrackingService;
 
-  @Captor ArgumentCaptor<Runnable> runnableCaptor;
+    @Captor
+    ArgumentCaptor<Runnable> runnableCaptor;
 
-  BotConfig testBotConfig =
-      BotConfig.builder()
-          .logTracking(
-              List.of(
-                  LogTracking.builder()
-                      .channelId("123")
-                      .query("query")
-                      .lokiInstance("loki")
-                      .build()))
-          .build();
+    BotConfig testBotConfig = BotConfig.builder()
+            .logTracking(List.of(LogTracking.builder()
+                    .channelId("123")
+                    .query("query")
+                    .lokiInstance("loki")
+                    .build()))
+            .build();
 
-  @BeforeEach
-  void beforeEach() {
-    MockitoAnnotations.openMocks(this);
+    @BeforeEach
+    void beforeEach() {
+        MockitoAnnotations.openMocks(this);
 
-    when(this.yamlConfigService.getBotConfig()).thenReturn(testBotConfig);
-  }
+        when(this.yamlConfigService.getBotConfig()).thenReturn(testBotConfig);
+    }
 
-  @Test
-  void startTracking_addsClientsToList() {
-    JDA jda = mock(JDA.class);
-    LogTrackingStreamClient clientMock = mock(LogTrackingStreamClient.class);
+    @Test
+    void startTracking_addsClientsToList() {
+        JDA jda = mock(JDA.class);
+        LogTrackingStreamClient clientMock = mock(LogTrackingStreamClient.class);
 
-    when(logTrackingStreamClientFactory.create(any(), any(), any())).thenReturn(clientMock);
+        when(logTrackingStreamClientFactory.create(any(), any(), any())).thenReturn(clientMock);
 
-    logTrackingService.startTracking(jda);
+        logTrackingService.startTracking(jda);
 
-    assertEquals(1, logTrackingService.getLogTrackingStreamClients().size());
-    assertSame(clientMock, logTrackingService.getLogTrackingStreamClients().get(0));
-  }
+        assertEquals(1, logTrackingService.getLogTrackingStreamClients().size());
+        assertSame(clientMock, logTrackingService.getLogTrackingStreamClients().get(0));
+    }
 
-  @Test
-  void reconnect_removesOldClientsAndCreatesNewOne() throws Exception {
-    LogTrackingStreamClient oldClient = mock(LogTrackingStreamClient.class);
-    JDA jda = mock(JDA.class);
+    @Test
+    void reconnect_removesOldClientsAndCreatesNewOne() throws Exception {
+        LogTrackingStreamClient oldClient = mock(LogTrackingStreamClient.class);
+        JDA jda = mock(JDA.class);
 
-    when(oldClient.getURI()).thenReturn(new URI("http://loki123"));
-    when(logTrackingStreamClientFactory.create(any(), any(), any())).thenReturn(oldClient);
+        when(oldClient.getURI()).thenReturn(new URI("http://loki123"));
+        when(logTrackingStreamClientFactory.create(any(), any(), any())).thenReturn(oldClient);
 
-    logTrackingService.startTracking(jda);
+        logTrackingService.startTracking(jda);
 
-    // List should contain oldClient
-    assertEquals(1, logTrackingService.getLogTrackingStreamClients().size());
+        // List should contain oldClient
+        assertEquals(1, logTrackingService.getLogTrackingStreamClients().size());
 
-    // Capture reconnect Runnable
-    verify(logTrackingStreamClientFactory).create(any(), any(), runnableCaptor.capture());
+        // Capture reconnect Runnable
+        verify(logTrackingStreamClientFactory).create(any(), any(), runnableCaptor.capture());
 
-    // Run reconnect
-    runnableCaptor.getValue().run();
+        // Run reconnect
+        runnableCaptor.getValue().run();
 
-    // Old client should be removed from the list after reconnect
-    // Wait some time or run the scheduled task immediately (to avoid timing issues)
-    // For simplicity, just check that old client is removed (simulate direct call)
-    assertFalse(logTrackingService.getLogTrackingStreamClients().contains(oldClient));
-  }
+        // Old client should be removed from the list after reconnect
+        // Wait some time or run the scheduled task immediately (to avoid timing issues)
+        // For simplicity, just check that old client is removed (simulate direct call)
+        assertFalse(logTrackingService.getLogTrackingStreamClients().contains(oldClient));
+    }
 }

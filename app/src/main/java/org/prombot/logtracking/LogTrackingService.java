@@ -14,36 +14,38 @@ import org.prombot.config.domain.LogTracking;
 
 @Slf4j
 public class LogTrackingService {
-  @Inject private YamlConfigService yamlConfigService;
+    @Inject
+    private YamlConfigService yamlConfigService;
 
-  @Inject private LogTrackingStreamClientFactory logTrackingStreamClientFactory;
+    @Inject
+    private LogTrackingStreamClientFactory logTrackingStreamClientFactory;
 
-  @Getter private final List<LogTrackingStreamClient> logTrackingStreamClients = new ArrayList<>();
+    @Getter
+    private final List<LogTrackingStreamClient> logTrackingStreamClients = new ArrayList<>();
 
-  public void startTracking(JDA jda) {
-    BotConfig botConfig = yamlConfigService.getBotConfig();
+    public void startTracking(JDA jda) {
+        BotConfig botConfig = yamlConfigService.getBotConfig();
 
-    log.info("Will track {} streams", botConfig.getLogTracking().size());
+        log.info("Will track {} streams", botConfig.getLogTracking().size());
 
-    for (LogTracking logTracking : botConfig.getLogTracking()) {
-      createAndConnectClient(jda, logTracking);
+        for (LogTracking logTracking : botConfig.getLogTracking()) {
+            createAndConnectClient(jda, logTracking);
+        }
     }
-  }
 
-  private void createAndConnectClient(JDA jda, LogTracking logTracking) {
-    LogTrackingStreamClient client =
-        logTrackingStreamClientFactory.create(jda, logTracking, () -> reconnect(jda, logTracking));
-    logTrackingStreamClients.add(client);
-    client.connect();
-  }
+    private void createAndConnectClient(JDA jda, LogTracking logTracking) {
+        LogTrackingStreamClient client =
+                logTrackingStreamClientFactory.create(jda, logTracking, () -> reconnect(jda, logTracking));
+        logTrackingStreamClients.add(client);
+        client.connect();
+    }
 
-  private void reconnect(JDA jda, LogTracking logTracking) {
-    log.info("Reconnecting to stream for channel {}", logTracking.getChannelId());
+    private void reconnect(JDA jda, LogTracking logTracking) {
+        log.info("Reconnecting to stream for channel {}", logTracking.getChannelId());
 
-    logTrackingStreamClients.removeIf(
-        client -> client.getURI().toString().contains(logTracking.getChannelId()));
+        logTrackingStreamClients.removeIf(client -> client.getURI().toString().contains(logTracking.getChannelId()));
 
-    Executors.newSingleThreadScheduledExecutor()
-        .schedule(() -> createAndConnectClient(jda, logTracking), 5, TimeUnit.SECONDS);
-  }
+        Executors.newSingleThreadScheduledExecutor()
+                .schedule(() -> createAndConnectClient(jda, logTracking), 5, TimeUnit.SECONDS);
+    }
 }

@@ -6,9 +6,9 @@ import org.prombot.logtracking.LogTrackingStreamClientFactory;
 
 public class LogTrackingModule extends AbstractModule {
 
-  @Override
-  protected void configure() {
-    bind(LogTrackingService.class).asEagerSingleton();
-    bind(LogTrackingStreamClientFactory.class).asEagerSingleton();
-  }
+    @Override
+    protected void configure() {
+        bind(LogTrackingService.class).asEagerSingleton();
+        bind(LogTrackingStreamClientFactory.class).asEagerSingleton();
+    }
 }

@@ -10,21 +10,21 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.prombot.prom.PromFetcher;
 
 public class FetchLastDoubleCommand implements Command {
-  @Getter
-  private final CommandData commandData =
-      Commands.slash("fetchlastdouble", "Fetches the last double")
-          .addOption(OptionType.STRING, "query", "The query");
+    @Getter
+    private final CommandData commandData = Commands.slash("fetchlastdouble", "Fetches the last double")
+            .addOption(OptionType.STRING, "query", "The query");
 
-  @Inject private PromFetcher promFetcher;
+    @Inject
+    private PromFetcher promFetcher;
 
-  @Override
-  public void handle(SlashCommandInteractionEvent event) {
-    OptionMapping optionMapping = event.getOption("query");
+    @Override
+    public void handle(SlashCommandInteractionEvent event) {
+        OptionMapping optionMapping = event.getOption("query");
 
-    if (optionMapping == null) throw new RuntimeException("Option is null");
+        if (optionMapping == null) throw new RuntimeException("Option is null");
 
-    String query = optionMapping.getAsString();
+        String query = optionMapping.getAsString();
 
-    event.reply(promFetcher.fetchLastValue(query).toString()).queue();
-  }
+        event.reply(promFetcher.fetchLastValue(query).toString()).queue();
+    }
 }

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BotConfig {
-  private String prometheusUrl;
+    private String prometheusUrl;
 
-  private List<NamedQuery> metrics;
-  private List<ChannelTracking> trackChannels;
-  private List<LogTracking> logTracking;
+    private List<NamedQuery> metrics;
+    private List<ChannelTracking> trackChannels;
+    private List<LogTracking> logTracking;
 }

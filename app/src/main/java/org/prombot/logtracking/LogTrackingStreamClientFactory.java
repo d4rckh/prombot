@@ -6,8 +6,8 @@ import org.prombot.config.domain.LogTracking;
 
 @NoArgsConstructor
 public class LogTrackingStreamClientFactory {
-  LogTrackingStreamClient create(JDA jda, LogTracking logTracking, Runnable reconnectCallback) {
-    return new LogTrackingStreamClient(jda, logTracking, reconnectCallback);
-  }
-  ;
+    LogTrackingStreamClient create(JDA jda, LogTracking logTracking, Runnable reconnectCallback) {
+        return new LogTrackingStreamClient(jda, logTracking, reconnectCallback);
+    }
+    ;
 }

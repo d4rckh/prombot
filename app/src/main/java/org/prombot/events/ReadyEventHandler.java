@@ -15,39 +15,42 @@ import org.prombot.logtracking.LogTrackingService;
 
 @Slf4j
 public class ReadyEventHandler extends ListenerAdapter {
-  @Inject private Set<Command> commands;
+    @Inject
+    private Set<Command> commands;
 
-  @Inject ChannelTrackingService channelTrackingService;
+    @Inject
+    ChannelTrackingService channelTrackingService;
 
-  @Inject LogTrackingService logTrackingService;
+    @Inject
+    LogTrackingService logTrackingService;
 
-  @Override
-  public void onReady(ReadyEvent event) {
-    JDA jda = event.getJDA();
-    List<CommandData> commandDatas = this.commands.stream().map(c -> c.getCommandData()).toList();
+    @Override
+    public void onReady(ReadyEvent event) {
+        JDA jda = event.getJDA();
+        List<CommandData> commandDatas =
+                this.commands.stream().map(c -> c.getCommandData()).toList();
 
-    log.info("Loading {} commands", commandDatas.size());
+        log.info("Loading {} commands", commandDatas.size());
 
-    log.info("Currently in {} guilds", jda.getGuilds().size());
+        log.info("Currently in {} guilds", jda.getGuilds().size());
 
-    // this is the development guild, ignore
-    Guild guild = jda.getGuildById("1394383899999604756");
-    if (guild != null) {
-      guild
-          .updateCommands()
-          .addCommands(commandDatas)
-          .queue(
-              success -> log.info("Successfully registered guild commands!"),
-              error -> log.error("Failed to register guild commands", error));
+        // this is the development guild, ignore
+        Guild guild = jda.getGuildById("1394383899999604756");
+        if (guild != null) {
+            guild.updateCommands()
+                    .addCommands(commandDatas)
+                    .queue(
+                            success -> log.info("Successfully registered guild commands!"),
+                            error -> log.error("Failed to register guild commands", error));
+        }
+
+        jda.updateCommands()
+                .addCommands(commandDatas)
+                .queue(
+                        success -> log.info("Successfully registered globals commands!"),
+                        error -> log.error("Failed to register globals commands", error));
+
+        channelTrackingService.startTracking(jda);
+        logTrackingService.startTracking(jda);
     }
-
-    jda.updateCommands()
-        .addCommands(commandDatas)
-        .queue(
-            success -> log.info("Successfully registered globals commands!"),
-            error -> log.error("Failed to register globals commands", error));
-
-    channelTrackingService.startTracking(jda);
-    logTrackingService.startTracking(jda);
-  }
 }

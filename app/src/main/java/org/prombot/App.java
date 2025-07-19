@@ -16,23 +16,24 @@ import org.prombot.modules.PromModule;
 
 @Slf4j
 public class App {
-  @Inject private SlashCommandInteractionHandler slashCommandInteractionHandler;
+    @Inject
+    private SlashCommandInteractionHandler slashCommandInteractionHandler;
 
-  @Inject private ReadyEventHandler readyEventHandler;
+    @Inject
+    private ReadyEventHandler readyEventHandler;
 
-  public static void main(String[] args) throws LoginException {
-    Injector injector =
-        Guice.createInjector(
-            new BotModule(), new PromModule(), new ConfigModule(), new ChannelTrackingModule());
+    public static void main(String[] args) throws LoginException {
+        Injector injector = Guice.createInjector(
+                new BotModule(), new PromModule(), new ConfigModule(), new ChannelTrackingModule());
 
-    injector.getInstance(App.class).start();
-  }
+        injector.getInstance(App.class).start();
+    }
 
-  public void start() {
-    String token = System.getenv("DISCORD_TOKEN");
-    JDABuilder.createDefault(token)
-        .addEventListeners(slashCommandInteractionHandler, readyEventHandler)
-        .setActivity(Activity.playing("with metrics"))
-        .build();
-  }
+    public void start() {
+        String token = System.getenv("DISCORD_TOKEN");
+        JDABuilder.createDefault(token)
+                .addEventListeners(slashCommandInteractionHandler, readyEventHandler)
+                .setActivity(Activity.playing("with metrics"))
+                .build();
+    }
 }

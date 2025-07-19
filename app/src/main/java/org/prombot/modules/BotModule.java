@@ -11,16 +11,16 @@ import org.prombot.events.ReadyEventHandler;
 import org.prombot.events.SlashCommandInteractionHandler;
 
 public class BotModule extends AbstractModule {
-  @Override
-  protected void configure() {
-    Multibinder<Command> commandBinder = Multibinder.newSetBinder(binder(), Command.class);
+    @Override
+    protected void configure() {
+        Multibinder<Command> commandBinder = Multibinder.newSetBinder(binder(), Command.class);
 
-    commandBinder.addBinding().to(PingCommand.class);
-    commandBinder.addBinding().to(FetchLastDoubleCommand.class);
-    commandBinder.addBinding().to(ShowConfigCommand.class);
-    commandBinder.addBinding().to(MetricsCommand.class);
+        commandBinder.addBinding().to(PingCommand.class);
+        commandBinder.addBinding().to(FetchLastDoubleCommand.class);
+        commandBinder.addBinding().to(ShowConfigCommand.class);
+        commandBinder.addBinding().to(MetricsCommand.class);
 
-    bind(SlashCommandInteractionHandler.class).asEagerSingleton();
-    bind(ReadyEventHandler.class).asEagerSingleton();
-  }
+        bind(SlashCommandInteractionHandler.class).asEagerSingleton();
+        bind(ReadyEventHandler.class).asEagerSingleton();
+    }
 }

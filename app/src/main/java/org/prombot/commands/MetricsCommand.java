@@ -12,33 +12,33 @@ import org.prombot.prom.PromFetcher;
 import org.prombot.utils.FormatUtil;
 
 public class MetricsCommand implements Command {
-  @Getter
-  private final CommandData commandData =
-      Commands.slash("metrics", "Shows all metrics and their current values.");
+    @Getter
+    private final CommandData commandData = Commands.slash("metrics", "Shows all metrics and their current values.");
 
-  @Inject YamlConfigService yamlConfigService;
+    @Inject
+    YamlConfigService yamlConfigService;
 
-  @Inject PromFetcher promFetcher;
+    @Inject
+    PromFetcher promFetcher;
 
-  @Override
-  public void handle(SlashCommandInteractionEvent event) {
-    BotConfig config = yamlConfigService.getBotConfig();
+    @Override
+    public void handle(SlashCommandInteractionEvent event) {
+        BotConfig config = yamlConfigService.getBotConfig();
 
-    if (config == null || config.getMetrics() == null || config.getMetrics().isEmpty()) {
-      event.reply("No metrics configured.").queue();
-      return;
+        if (config == null || config.getMetrics() == null || config.getMetrics().isEmpty()) {
+            event.reply("No metrics configured.").queue();
+            return;
+        }
+
+        StringBuilder response = new StringBuilder("Metrics:\n");
+        for (NamedQuery nq : config.getMetrics()) {
+            response.append("- **")
+                    .append(nq.getName())
+                    .append("**: ")
+                    .append(FormatUtil.formatValue(promFetcher.fetchLastValue(nq.getQuery()), nq.getFormat()))
+                    .append("\n");
+        }
+
+        event.reply(response.toString()).queue();
     }
-
-    StringBuilder response = new StringBuilder("Metrics:\n");
-    for (NamedQuery nq : config.getMetrics()) {
-      response
-          .append("- **")
-          .append(nq.getName())
-          .append("**: ")
-          .append(FormatUtil.formatValue(promFetcher.fetchLastValue(nq.getQuery()), nq.getFormat()))
-          .append("\n");
-    }
-
-    event.reply(response.toString()).queue();
-  }
 }

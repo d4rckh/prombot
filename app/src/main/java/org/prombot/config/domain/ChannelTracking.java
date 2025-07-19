@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChannelTracking {
-  private String channelId;
-  private String name;
+    private String channelId;
+    private String name;
 }
