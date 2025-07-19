@@ -55,6 +55,7 @@ metrics:
 logTracking:
   - channelId: 1395816967981633668
     lokiInstance: loki:3100
+    serverTailMaxDuration: 1h # it defaults to 1h, change this if it's set different on your loki server 
     query: >
       {job="caddy"}
       | json
