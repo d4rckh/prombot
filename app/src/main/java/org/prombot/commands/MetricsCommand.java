@@ -17,6 +17,7 @@ public class MetricsCommand implements Command {
       Commands.slash("metrics", "Shows all metrics and their current values.");
 
   @Inject YamlConfigService yamlConfigService;
+
   @Inject PromFetcher promFetcher;
 
   @Override

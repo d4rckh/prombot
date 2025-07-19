@@ -18,19 +18,19 @@ class PromFetcherTest {
   void testParsePromResponse_successfulResponse() {
     String jsonResponse =
         """
-        {
-          "status": "success",
-          "data": {
-            "resultType": "vector",
-            "result": [
-              {
-                "metric": {},
-                "value": [1690000000.123, "42.6789"]
-              }
-            ]
-          }
-        }
-        """;
+				{
+				  "status": "success",
+				  "data": {
+				    "resultType": "vector",
+				    "result": [
+				      {
+				        "metric": {},
+				        "value": [1690000000.123, "42.6789"]
+				      }
+				    ]
+				  }
+				}
+				""";
 
     double result = promFetcher.parsePromResponse(jsonResponse);
     assertEquals(42.67, result);
@@ -40,11 +40,11 @@ class PromFetcherTest {
   void testParsePromResponse_failureStatus() {
     String jsonResponse =
         """
-        {
-          "status": "error",
-          "error": "some error message"
-        }
-        """;
+				{
+				  "status": "error",
+				  "error": "some error message"
+				}
+				""";
 
     RuntimeException exception =
         assertThrows(
@@ -60,14 +60,14 @@ class PromFetcherTest {
   void testParsePromResponse_emptyResult() {
     String jsonResponse =
         """
-        {
-          "status": "success",
-          "data": {
-            "resultType": "vector",
-            "result": []
-          }
-        }
-        """;
+				{
+				  "status": "success",
+				  "data": {
+				    "resultType": "vector",
+				    "result": []
+				  }
+				}
+				""";
 
     RuntimeException exception =
         assertThrows(

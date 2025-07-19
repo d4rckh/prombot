@@ -16,7 +16,9 @@ import org.prombot.logtracking.LogTrackingService;
 @Slf4j
 public class ReadyEventHandler extends ListenerAdapter {
   @Inject private Set<Command> commands;
+
   @Inject ChannelTrackingService channelTrackingService;
+
   @Inject LogTrackingService logTrackingService;
 
   @Override

@@ -302,7 +302,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.App$$FastClassByGuice$$af2e7d",
+  "name":"org.prombot.App$$FastClassByGuice$$be4cbb",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -313,7 +313,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.channeltracking.ChannelTrackingService$$FastClassByGuice$$55fc55",
+  "name":"org.prombot.channeltracking.ChannelTrackingService$$FastClassByGuice$$63e964",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -324,7 +324,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.commands.FetchLastDoubleCommand$$FastClassByGuice$$7081b6",
+  "name":"org.prombot.commands.FetchLastDoubleCommand$$FastClassByGuice$$825b0b",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -335,7 +335,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.commands.MetricsCommand$$FastClassByGuice$$904efb",
+  "name":"org.prombot.commands.MetricsCommand$$FastClassByGuice$$af8d15",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -346,7 +346,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.commands.PingCommand$$FastClassByGuice$$6c8645",
+  "name":"org.prombot.commands.PingCommand$$FastClassByGuice$$7cbd7c",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -357,7 +357,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.commands.ShowConfigCommand$$FastClassByGuice$$88c737",
+  "name":"org.prombot.commands.ShowConfigCommand$$FastClassByGuice$$9e0077",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -368,7 +368,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.config.YamlConfigService$$FastClassByGuice$$4b89d4",
+  "name":"org.prombot.config.YamlConfigService$$FastClassByGuice$$5d38da",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -427,7 +427,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.events.ReadyEventHandler$$FastClassByGuice$$266ebb",
+  "name":"org.prombot.events.ReadyEventHandler$$FastClassByGuice$$3f6d0e",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -449,7 +449,18 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.logtracking.LogTrackingService$$FastClassByGuice$$1a9022",
+  "name":"org.prombot.logtracking.LogTrackingService$$FastClassByGuice$$215c69",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
+  "name":"org.prombot.logtracking.LogTrackingStreamClientFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.prombot.logtracking.LogTrackingStreamClientFactory$$FastClassByGuice$$1912e3",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -476,7 +487,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.prombot.prom.PromFetcher$$FastClassByGuice$$36c5d8",
+  "name":"org.prombot.prom.PromFetcher$$FastClassByGuice$$4daa7d",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {

@@ -28,10 +28,10 @@ public class LogTrackingStreamClient extends WebSocketClient {
   private final List<String> logBuffer = new CopyOnWriteArrayList<>();
 
   private final Runnable onClose;
-  
+
   private final Duration maxAgeClient;
-  
-  private Instant opennedAt; 
+
+  private Instant opennedAt;
 
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -124,7 +124,8 @@ public class LogTrackingStreamClient extends WebSocketClient {
       textChannel.sendMessage(chunk.toString()).queue();
     }
 
-    if (Duration.between(opennedAt, Instant.now()).toMillis() > (this.maxAgeClient.toMillis() - 15000)) {
+    if (Duration.between(opennedAt, Instant.now()).toMillis()
+        > (this.maxAgeClient.toMillis() - 15000)) {
       this.close(1012 /* Service REstart */, "Closing client before server max tail duration.");
     }
   }
