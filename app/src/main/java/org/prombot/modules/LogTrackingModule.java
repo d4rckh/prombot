@@ -5,7 +5,6 @@ import org.prombot.logtracking.LogTrackingService;
 import org.prombot.logtracking.LogTrackingStreamClientFactory;
 
 public class LogTrackingModule extends AbstractModule {
-
     @Override
     protected void configure() {
         bind(LogTrackingService.class).asEagerSingleton();
