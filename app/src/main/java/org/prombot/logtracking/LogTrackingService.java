@@ -3,11 +3,17 @@ package org.prombot.logtracking;
 import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.prombot.config.YamlConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.LogTracking;
@@ -20,22 +26,34 @@ public class LogTrackingService {
     @Inject
     private LogTrackingStreamClientFactory logTrackingStreamClientFactory;
 
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
     @Getter
     private final List<LogTrackingStreamClient> logTrackingStreamClients = new ArrayList<>();
 
-    public void startTracking(JDA jda) {
-        BotConfig botConfig = yamlConfigService.getBotConfig();
+    private final Map<LogTracking, List<String>> logBuffers = new ConcurrentHashMap<>();
+    private JDA jda;
 
+    public void startTracking(JDA jda) {
+        this.jda = jda;
+
+        BotConfig botConfig = yamlConfigService.getBotConfig();
         log.info("Will track {} streams", botConfig.getLogTracking().size());
 
         for (LogTracking logTracking : botConfig.getLogTracking()) {
+            logBuffers.put(logTracking, new CopyOnWriteArrayList<>());
             createAndConnectClient(jda, logTracking);
         }
+
+        scheduler.scheduleAtFixedRate(this::flushAll, 5, 10, TimeUnit.SECONDS);
     }
 
     private void createAndConnectClient(JDA jda, LogTracking logTracking) {
-        LogTrackingStreamClient client =
-                logTrackingStreamClientFactory.create(jda, logTracking, () -> reconnect(jda, logTracking));
+        Consumer<String> logHandler = logLine -> logBuffers.get(logTracking).add(logLine);
+
+        Runnable onClose = () -> reconnect(jda, logTracking);
+
+        LogTrackingStreamClient client = logTrackingStreamClientFactory.create(logTracking, logHandler, onClose);
         logTrackingStreamClients.add(client);
         client.connect();
     }
@@ -47,5 +65,69 @@ public class LogTrackingService {
 
         Executors.newSingleThreadScheduledExecutor()
                 .schedule(() -> createAndConnectClient(jda, logTracking), 5, TimeUnit.SECONDS);
+    }
+
+    private void flushAll() {
+        final int maxLinesTotal = 50;
+        final int discordLimit = 1990;
+
+        for (Map.Entry<LogTracking, List<String>> entry : logBuffers.entrySet()) {
+            LogTracking config = entry.getKey();
+            List<String> buffer = entry.getValue();
+
+            if (buffer == null || buffer.isEmpty()) continue;
+
+            TextChannel textChannel = jda.getTextChannelById(config.getChannelId());
+
+            if (textChannel == null) {
+                log.warn("Couldn't find text channel with ID {}", config.getChannelId());
+                continue;
+            }
+
+            List<String> toSend = truncateLogs(buffer, maxLinesTotal);
+            buffer.clear();
+
+            sendToDiscord(toSend, textChannel, discordLimit);
+        }
+
+        logTrackingStreamClients.removeIf(client -> {
+            if (client.shouldCloseSoon()) {
+                client.close(1012, "Restarting due to max tail duration");
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private List<String> truncateLogs(List<String> original, int maxLines) {
+        if (original.size() <= maxLines) return new ArrayList<>(original);
+
+        int linesToSkip = original.size() - maxLines + 1;
+        int keepStart = maxLines / 2;
+        int keepEnd = maxLines - keepStart - 1;
+
+        List<String> cut = new ArrayList<>(maxLines);
+        cut.addAll(original.subList(0, keepStart));
+        cut.add("...skipped " + linesToSkip + " lines...");
+        cut.addAll(original.subList(original.size() - keepEnd, original.size()));
+        return cut;
+    }
+
+    private void sendToDiscord(List<String> lines, TextChannel channel, int maxLength) {
+        StringBuilder chunk = new StringBuilder("```\n");
+
+        for (String line : lines) {
+            if (chunk.length() + line.length() + 1 >= maxLength) {
+                chunk.append("```");
+                channel.sendMessage(chunk.toString()).queue();
+                chunk = new StringBuilder("```\n");
+            }
+            chunk.append(line).append("\n");
+        }
+
+        if (chunk.length() > 4) {
+            chunk.append("```");
+            channel.sendMessage(chunk.toString()).queue();
+        }
     }
 }
