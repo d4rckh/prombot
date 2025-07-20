@@ -17,14 +17,14 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.ChannelTracking;
 import org.prombot.config.domain.NamedQuery;
 
 class ShowConfigCommandTest {
     @Mock
-    private YamlConfigService yamlConfigService;
+    private ConfigService yamlConfigService;
 
     @Mock
     private JDA jda;

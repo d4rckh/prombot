@@ -5,7 +5,7 @@ import lombok.Getter;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.NamedQuery;
 import org.prombot.prom.PromFetcher;
@@ -16,7 +16,7 @@ public class MetricsCommand implements Command {
     private final CommandData commandData = Commands.slash("metrics", "Shows all metrics and their current values.");
 
     @Inject
-    YamlConfigService yamlConfigService;
+    ConfigService yamlConfigService;
 
     @Inject
     PromFetcher promFetcher;

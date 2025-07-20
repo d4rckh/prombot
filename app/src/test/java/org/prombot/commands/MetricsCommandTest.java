@@ -15,7 +15,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.NamedQuery;
 import org.prombot.prom.PromFetcher;
@@ -25,7 +25,7 @@ class MetricsCommandTest {
     private PromFetcher promFetcher;
 
     @Mock
-    private YamlConfigService yamlConfigService;
+    private ConfigService yamlConfigService;
 
     @Mock
     private SlashCommandInteractionEvent slashCommandInteractionEvent;

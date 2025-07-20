@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.prombot.config.domain.BotConfig;
 
 @Slf4j
-public class YamlConfigService {
+public class ConfigService {
     private BotConfig cachedBotConfig;
 
     public BotConfig getBotConfig() {

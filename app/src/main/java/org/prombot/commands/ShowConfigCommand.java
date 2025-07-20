@@ -7,14 +7,14 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.ChannelTracking;
 import org.prombot.config.domain.NamedQuery;
 
 public class ShowConfigCommand implements Command {
     @Inject
-    YamlConfigService yamlConfigService;
+    ConfigService yamlConfigService;
 
     @Getter
     private final CommandData commandData = Commands.slash("showconfig", "Shows current bot config");

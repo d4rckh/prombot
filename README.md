@@ -2,11 +2,12 @@
 
 **Bring your Prometheus metrics directly into your Discord server!**
 
-PromBot is a powerful Java-based Discord bot built with [JDA](https://github.com/DV8FromTheWorld/JDA) and compiled natively using [GraalVM](https://www.graalvm.org/) for lightning-fast performance.
+PromBot is a powerful Java-based Discord bot built with [JDA](https://github.com/DV8FromTheWorld/JDA).
 
 ## Features
 
-- 🔍 `/metrics` command — View your configured Prometheus metrics instantly.
+- 🔍 `/metrics` command — View all your configured Prometheus metrics' current values.
+- 🔍 `/plot` command — Plot your configured Prometheus metrics for the last 24 hours.
 - 📊 Real-time tracking — Automatically update your Discord **channel names** with live metric values.
 - 🗒️ Real-time log streaming - Connect Loki to your text channels.
 - ⚙️ Easy configuration — Simple YAML setup to define metrics and tracked channels.

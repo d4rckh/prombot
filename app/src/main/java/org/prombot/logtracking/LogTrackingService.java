@@ -14,14 +14,14 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.LogTracking;
 
 @Slf4j
 public class LogTrackingService {
     @Inject
-    private YamlConfigService yamlConfigService;
+    private ConfigService yamlConfigService;
 
     @Inject
     private LogTrackingStreamClientFactory logTrackingStreamClientFactory;

@@ -204,6 +204,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"java.lang.ClassLoader$$DefineAccessByGuice$$/0x0000000800d5c400",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"java.lang.Double",
   "methods":[{"name":"parseDouble","parameterTypes":["java.lang.String"] }]
 },
@@ -272,6 +276,20 @@
   "name":"java.util.Date"
 },
 {
+  "name":"javax.imageio.spi.ImageReaderSpi"
+},
+{
+  "name":"javax.imageio.spi.ImageReaderWriterSpi",
+  "methods":[
+    {"name":"getFileSuffixes","parameterTypes":[] }, 
+    {"name":"getFormatNames","parameterTypes":[] }, 
+    {"name":"getMIMETypes","parameterTypes":[] }
+  ]
+},
+{
+  "name":"javax.imageio.spi.ImageWriterSpi"
+},
+{
   "name":"javax.net.ssl.SNIHostName",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
 },
@@ -305,6 +323,10 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.App$$FastClassByGuice$$c56a3e",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.channeltracking.ChannelTrackingService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -317,6 +339,10 @@
 },
 {
   "name":"org.prombot.channeltracking.ChannelTrackingService$$FastClassByGuice$$66c353",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
+  "name":"org.prombot.channeltracking.ChannelTrackingService$$FastClassByGuice$$6ff4da",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -335,6 +361,10 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.commands.FetchLastDoubleCommand$$FastClassByGuice$$84f2a5",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.commands.MetricsCommand",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -350,6 +380,10 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.commands.MetricsCommand$$FastClassByGuice$$afd068",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.commands.PingCommand",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -361,7 +395,22 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.commands.PingCommand$$FastClassByGuice$$72ccc5",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.commands.PingCommand$$FastClassByGuice$$7cbd7c",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
+  "name":"org.prombot.commands.PlotCommand",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.prombot.commands.PlotCommand$$FastClassByGuice$$b76cb5",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -372,11 +421,26 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"org.prombot.commands.ShowConfigCommand$$FastClassByGuice$$90520d",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.commands.ShowConfigCommand$$FastClassByGuice$$9741cb",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
   "name":"org.prombot.commands.ShowConfigCommand$$FastClassByGuice$$9e0077",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
+  "name":"org.prombot.config.ConfigService",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.prombot.config.ConfigService$$FastClassByGuice$$52bc93",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -451,6 +515,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"org.prombot.events.ReadyEventHandler$$FastClassByGuice$$38b5b8",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.events.ReadyEventHandler$$FastClassByGuice$$3bcfb6",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
@@ -470,6 +538,10 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.events.SlashCommandInteractionHandler$$FastClassByGuice$$f158f",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.logtracking.LogTrackingService",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -485,6 +557,10 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.logtracking.LogTrackingService$$FastClassByGuice$$24beb9",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.prombot.logtracking.LogTrackingStreamClientFactory",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
@@ -497,6 +573,10 @@
 },
 {
   "name":"org.prombot.logtracking.LogTrackingStreamClientFactory$$FastClassByGuice$$1912e3",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
+  "name":"org.prombot.logtracking.LogTrackingStreamClientFactory$$FastClassByGuice$$1e8fd9",
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
@@ -531,7 +611,19 @@
   "fields":[{"name":"GUICE$INVOKERS"}]
 },
 {
+  "name":"org.prombot.prom.PromFetcher$$FastClassByGuice$$4fd5a0",
+  "fields":[{"name":"GUICE$INVOKERS"}]
+},
+{
   "name":"org.slf4j.spi.SLF4JServiceProvider"
+},
+{
+  "name":"sun.awt.X11FontManager",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.misc.Unsafe",

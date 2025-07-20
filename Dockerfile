@@ -1,32 +1,29 @@
-# Stage 1: Build native image using GraalVM
-FROM ghcr.io/graalvm/graalvm-ce:ol8-java17-22.3.3 AS builder
+# Stage 1: Build the JAR using Gradle and JDK 17
+FROM eclipse-temurin:17-jdk AS builder
 
 WORKDIR /home/gradle/project
 
-RUN gu install native-image
-
 COPY gradlew .
 COPY gradle gradle
-
 RUN chmod +x ./gradlew
+
+# To cache the gradle jars
 RUN ./gradlew --no-daemon --no-configuration-cache
 
 COPY settings.gradle.kts .
 COPY gradle.properties .
-
 COPY app ./app
 
-RUN ./gradlew :app:clean :app:nativeCompile --no-daemon --no-configuration-cache
+# Build the JAR
+RUN ./gradlew :app:clean :app:build --no-daemon --no-configuration-cache
 
-FROM ubuntu:22.04
-
-# RUN apk add --no-cache libstdc++ libgcc
+# Stage 2: Run using lightweight JRE base image
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-COPY --from=builder /home/gradle/project/app/build/native/nativeCompile/prombot ./prombot
+# Copy the built JAR from the builder stage
+COPY --from=builder /home/gradle/project/app/build/libs/app-all.jar ./prombot.jar
 
-# Make sure it's executable
-RUN chmod +x ./prombot
-
-ENTRYPOINT ["./prombot"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "prombot.jar"]

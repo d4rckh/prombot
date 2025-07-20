@@ -8,5 +8,8 @@
       "pattern":"\\Qlogback.xml\\E"
     }
   ]},
-  "bundles":[]
+  "bundles":[{
+      "name":"sun.awt.resources.awt",
+      "classNames":["sun.awt.resources.awt"]
+    }]
 }

@@ -14,13 +14,13 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.LogTracking;
 
 public class LogTrackingServiceTest {
     @Mock
-    YamlConfigService yamlConfigService;
+    ConfigService yamlConfigService;
 
     @Mock
     LogTrackingStreamClientFactory logTrackingStreamClientFactory;

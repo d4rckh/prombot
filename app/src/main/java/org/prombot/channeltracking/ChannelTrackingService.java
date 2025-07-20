@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import org.prombot.config.YamlConfigService;
+import org.prombot.config.ConfigService;
 import org.prombot.config.domain.BotConfig;
 import org.prombot.config.domain.ChannelTracking;
 import org.prombot.config.domain.NamedQuery;
@@ -18,10 +18,10 @@ import org.prombot.utils.FormatUtil;
 @Slf4j
 public class ChannelTrackingService {
     @Inject
-    YamlConfigService yamlConfigService;
+    private ConfigService yamlConfigService;
 
     @Inject
-    PromFetcher promFetcher;
+    private PromFetcher promFetcher;
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 

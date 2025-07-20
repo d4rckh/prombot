@@ -27,6 +27,7 @@ public class ReadyEventHandler extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         JDA jda = event.getJDA();
+
         List<CommandData> commandDatas =
                 this.commands.stream().map(c -> c.getCommandData()).toList();
 

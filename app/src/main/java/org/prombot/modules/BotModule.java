@@ -6,6 +6,7 @@ import org.prombot.commands.Command;
 import org.prombot.commands.FetchLastDoubleCommand;
 import org.prombot.commands.MetricsCommand;
 import org.prombot.commands.PingCommand;
+import org.prombot.commands.PlotCommand;
 import org.prombot.commands.ShowConfigCommand;
 import org.prombot.events.ReadyEventHandler;
 import org.prombot.events.SlashCommandInteractionHandler;
@@ -19,6 +20,7 @@ public class BotModule extends AbstractModule {
         commandBinder.addBinding().to(FetchLastDoubleCommand.class);
         commandBinder.addBinding().to(ShowConfigCommand.class);
         commandBinder.addBinding().to(MetricsCommand.class);
+        commandBinder.addBinding().to(PlotCommand.class);
 
         bind(SlashCommandInteractionHandler.class).asEagerSingleton();
         bind(ReadyEventHandler.class).asEagerSingleton();
