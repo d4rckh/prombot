@@ -124,7 +124,7 @@ public class LogTrackingStreamClient extends WebSocketClient {
             textChannel.sendMessage(chunk.toString()).queue();
         }
 
-        if (Duration.between(opennedAt, Instant.now()).toMillis() > (this.maxAgeClient.toMillis() - 15000)) {
+        if (Duration.between(opennedAt, Instant.now()).toMillis() > (this.maxAgeClient.toMillis() - 30000)) {
             this.close(1012 /* Service REstart */, "Closing client before server max tail duration.");
         }
     }

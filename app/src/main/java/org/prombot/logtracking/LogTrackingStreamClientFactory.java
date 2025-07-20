@@ -9,5 +9,4 @@ public class LogTrackingStreamClientFactory {
     LogTrackingStreamClient create(JDA jda, LogTracking logTracking, Runnable reconnectCallback) {
         return new LogTrackingStreamClient(jda, logTracking, reconnectCallback);
     }
-    ;
 }
