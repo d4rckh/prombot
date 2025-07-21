@@ -50,7 +50,7 @@ dependencies {
     implementation("org.java-websocket:Java-WebSocket:1.6.0")
     implementation("ch.qos.logback:logback-classic:1.5.18")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.1")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.2")
     implementation("com.google.inject:guice:7.0.0")
     implementation("com.squareup.okhttp3:okhttp:5.1.0")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
