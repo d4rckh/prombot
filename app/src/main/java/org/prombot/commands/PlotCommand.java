@@ -53,7 +53,7 @@ public class PlotCommand implements Command {
         String queryName = queryOptionMapping.getAsString();
 
         NamedQuery namedQuery = config.getMetrics().stream()
-                .filter(nq -> nq.getName().toLowerCase().contains(queryName))
+                .filter(nq -> nq.getName().toLowerCase().contains(queryName.toLowerCase()))
                 .findFirst()
                 .orElseThrow();
 

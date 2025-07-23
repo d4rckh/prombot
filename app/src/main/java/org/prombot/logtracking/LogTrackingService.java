@@ -26,13 +26,18 @@ public class LogTrackingService {
     @Inject
     private LogTrackingStreamClientFactory logTrackingStreamClientFactory;
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
     @Getter
     private final List<LogTrackingStreamClient> logTrackingStreamClients = new ArrayList<>();
 
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final Map<LogTracking, List<String>> logBuffers = new ConcurrentHashMap<>();
     private JDA jda;
+
+    private static final int MAX_LOGS_PER_MESSAGE = 50;
+    private static final int MAX_MESSAGE_LENGTH = 1990;
+    private static final int LOKI_CLIENT_RECONNECTION_DELAY_SECONDS = 5;
+    private static final int LOG_TRACKING_FLUSH_RATE_SECONDS = 10;
+    private static final int LOG_TRACKING_FLUSH_INITIAL_DELAY_SECONDS = 5;
 
     public void startTracking(JDA jda) {
         this.jda = jda;
@@ -45,7 +50,11 @@ public class LogTrackingService {
             createAndConnectClient(jda, logTracking);
         }
 
-        scheduler.scheduleAtFixedRate(this::flushAll, 5, 10, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(
+                this::flushAll,
+                LOG_TRACKING_FLUSH_INITIAL_DELAY_SECONDS,
+                LOG_TRACKING_FLUSH_RATE_SECONDS,
+                TimeUnit.SECONDS);
     }
 
     private void createAndConnectClient(JDA jda, LogTracking logTracking) {
@@ -64,13 +73,13 @@ public class LogTrackingService {
         logTrackingStreamClients.removeIf(client -> client.getURI().toString().contains(logTracking.getChannelId()));
 
         Executors.newSingleThreadScheduledExecutor()
-                .schedule(() -> createAndConnectClient(jda, logTracking), 5, TimeUnit.SECONDS);
+                .schedule(
+                        () -> createAndConnectClient(jda, logTracking),
+                        LOKI_CLIENT_RECONNECTION_DELAY_SECONDS,
+                        TimeUnit.SECONDS);
     }
 
     private void flushAll() {
-        final int maxLinesTotal = 50;
-        final int discordLimit = 1990;
-
         for (Map.Entry<LogTracking, List<String>> entry : logBuffers.entrySet()) {
             LogTracking config = entry.getKey();
             List<String> buffer = entry.getValue();
@@ -84,15 +93,15 @@ public class LogTrackingService {
                 continue;
             }
 
-            List<String> toSend = truncateLogs(buffer, maxLinesTotal);
+            List<String> toSend = truncateLogs(buffer, MAX_LOGS_PER_MESSAGE);
             buffer.clear();
 
-            sendToDiscord(toSend, textChannel, discordLimit);
+            sendToDiscord(toSend, textChannel, MAX_MESSAGE_LENGTH);
         }
 
         logTrackingStreamClients.removeIf(client -> {
             if (client.shouldCloseSoon()) {
-                client.close(1012, "Restarting due to max tail duration");
+                client.close(1000, "Restarting due to max tail duration");
                 return true;
             }
             return false;
@@ -117,7 +126,7 @@ public class LogTrackingService {
         StringBuilder chunk = new StringBuilder("```\n");
 
         for (String line : lines) {
-            if (chunk.length() + line.length() + 1 >= maxLength) {
+            if (chunk.length() + line.length() >= maxLength) {
                 chunk.append("```");
                 channel.sendMessage(chunk.toString()).queue();
                 chunk = new StringBuilder("```\n");

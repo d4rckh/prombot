@@ -24,6 +24,8 @@ public class ReadyEventHandler extends ListenerAdapter {
     @Inject
     LogTrackingService logTrackingService;
 
+    private static final String DEVELOPMENT_GUILD_ID = "1394383899999604756";
+
     @Override
     public void onReady(ReadyEvent event) {
         JDA jda = event.getJDA();
@@ -36,7 +38,7 @@ public class ReadyEventHandler extends ListenerAdapter {
         log.info("Currently in {} guilds", jda.getGuilds().size());
 
         // this is the development guild, ignore
-        Guild guild = jda.getGuildById("1394383899999604756");
+        Guild guild = jda.getGuildById(DEVELOPMENT_GUILD_ID);
         if (guild != null) {
             guild.updateCommands()
                     .addCommands(commandDatas)

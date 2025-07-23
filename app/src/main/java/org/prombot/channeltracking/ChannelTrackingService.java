@@ -17,7 +17,6 @@ import org.prombot.utils.FormatUtil;
 
 @Slf4j
 public class ChannelTrackingService {
-
     @Inject
     private ConfigService configService;
 
@@ -25,6 +24,8 @@ public class ChannelTrackingService {
     private PromFetcher promFetcher;
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+    private static final int CHANNEL_TRACKING_UPDATE_RATE_MINUTES = 15;
 
     public void startTracking(JDA jda) {
         BotConfig config = configService.getBotConfig();
@@ -41,7 +42,7 @@ public class ChannelTrackingService {
                     }
                 },
                 0,
-                15,
+                CHANNEL_TRACKING_UPDATE_RATE_MINUTES,
                 TimeUnit.MINUTES);
     }
 
@@ -77,6 +78,7 @@ public class ChannelTrackingService {
             if (result.contains(placeholder)) {
                 Double value = promFetcher.fetchLastValue(metric.getQuery());
                 String formatted = value == null ? "N/A" : FormatUtil.formatValue(value, metric.getFormat());
+
                 result = result.replace(placeholder, formatted);
             }
         }

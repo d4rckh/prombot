@@ -21,14 +21,16 @@ public class LogTrackingStreamClient extends WebSocketClient {
     private final Consumer<String> logHandler;
     private final Runnable onClose;
     private Instant opennedAt;
-    private final Duration maxAgeClient;
+    private final Duration maxTailDuration;
+
+    private static final int CLOSE_CLIENT_BEFORE_MAX_TAIL_MILIS = 30_000;
 
     public LogTrackingStreamClient(LogTracking logTracking, Consumer<String> logHandler, Runnable onClose) {
         super(buildWebSocketUrl(logTracking));
         this.startupNano = Instant.now().toEpochMilli() * 1_000_000L;
         this.logHandler = logHandler;
         this.onClose = onClose;
-        this.maxAgeClient = logTracking.getServerMaxDuration();
+        this.maxTailDuration = logTracking.getServerMaxDuration();
     }
 
     private static URI buildWebSocketUrl(LogTracking logTracking) {
@@ -84,6 +86,7 @@ public class LogTrackingStreamClient extends WebSocketClient {
     }
 
     public boolean shouldCloseSoon() {
-        return Duration.between(opennedAt, Instant.now()).toMillis() > (this.maxAgeClient.toMillis() - 30_000);
+        return Duration.between(opennedAt, Instant.now()).toMillis()
+                > (this.maxTailDuration.toMillis() - CLOSE_CLIENT_BEFORE_MAX_TAIL_MILIS);
     }
 }
