@@ -46,7 +46,7 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.38")
 
-    implementation("org.knowm.xchart:xchart:3.8.0")
+    implementation("org.knowm.xchart:xchart:3.8.8")
     implementation("org.java-websocket:Java-WebSocket:1.6.0")
     implementation("ch.qos.logback:logback-classic:1.5.18")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.1")
