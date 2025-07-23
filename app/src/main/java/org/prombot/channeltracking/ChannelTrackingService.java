@@ -18,8 +18,11 @@ import org.prombot.utils.FormatUtil;
 @Slf4j
 public class ChannelTrackingService {
 
-    @Inject private ConfigService configService;
-    @Inject private PromFetcher promFetcher;
+    @Inject
+    private ConfigService configService;
+
+    @Inject
+    private PromFetcher promFetcher;
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -27,15 +30,19 @@ public class ChannelTrackingService {
         BotConfig config = configService.getBotConfig();
         List<ChannelTracking> trackChannels = config.getTrackChannels();
 
-        executor.scheduleAtFixedRate(() -> {
-            try {
-                for (ChannelTracking tracking : trackChannels) {
-                    updateChannel(jda, config, tracking);
-                }
-            } catch (Exception e) {
-                log.error("Error in channel tracking task", e);
-            }
-        }, 0, 15, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(
+                () -> {
+                    try {
+                        for (ChannelTracking tracking : trackChannels) {
+                            updateChannel(jda, config, tracking);
+                        }
+                    } catch (Exception e) {
+                        log.error("Error in channel tracking task", e);
+                    }
+                },
+                0,
+                15,
+                TimeUnit.MINUTES);
     }
 
     public void stopTracking() {
