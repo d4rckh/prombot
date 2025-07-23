@@ -2,7 +2,7 @@ import com.adarshr.gradle.testlogger.theme.ThemeType;
 
 plugins {
     application
-    id("org.graalvm.buildtools.native") version "0.10.6"
+    id("org.graalvm.buildtools.native") version "0.11.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.diffplug.spotless") version "7.2.1"
     id("com.adarshr.test-logger") version "4.0.0"
