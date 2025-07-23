@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -42,7 +43,14 @@ public class PlotCommand implements Command {
     public void handle(SlashCommandInteractionEvent event) {
         BotConfig config = configService.getBotConfig();
 
-        String queryName = event.getOption("metric").getAsString();
+        OptionMapping queryOptionMapping = event.getOption("metric");
+
+        if (queryOptionMapping == null) {
+            event.reply("Couldn't find metric option");
+            return;
+        }
+
+        String queryName = queryOptionMapping.getAsString();
 
         NamedQuery namedQuery = config.getMetrics().stream()
                 .filter(nq -> nq.getName().toLowerCase().contains(queryName))

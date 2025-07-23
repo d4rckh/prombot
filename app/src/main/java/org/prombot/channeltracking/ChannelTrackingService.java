@@ -17,64 +17,63 @@ import org.prombot.utils.FormatUtil;
 
 @Slf4j
 public class ChannelTrackingService {
-    @Inject
-    private ConfigService yamlConfigService;
 
-    @Inject
-    private PromFetcher promFetcher;
+    @Inject private ConfigService configService;
+    @Inject private PromFetcher promFetcher;
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     public void startTracking(JDA jda) {
-        BotConfig botConfig = yamlConfigService.getBotConfig();
+        BotConfig config = configService.getBotConfig();
+        List<ChannelTracking> trackChannels = config.getTrackChannels();
 
-        List<ChannelTracking> trackChannels = yamlConfigService.getBotConfig().getTrackChannels();
-
-        executor.scheduleAtFixedRate(
-                () -> {
-                    try {
-                        for (ChannelTracking channelTracking : trackChannels) {
-                            String channelId = channelTracking.getChannelId();
-                            String nameTemplate = channelTracking.getName();
-
-                            StringBuilder updatedNameBuilder = new StringBuilder(nameTemplate);
-
-                            for (NamedQuery metric : botConfig.getMetrics()) {
-                                String placeholder = "{" + metric.getName() + "}";
-
-                                int index = updatedNameBuilder.indexOf(placeholder);
-
-                                if (index != -1) {
-                                    Double value = promFetcher.fetchLastValue(metric.getQuery());
-                                    String valueStr = value == null
-                                            ? "N/A"
-                                            : FormatUtil.formatValue(
-                                                    promFetcher.fetchLastValue(metric.getQuery()), metric.getFormat());
-
-                                    updatedNameBuilder.replace(index, index + placeholder.length(), valueStr);
-                                }
-                            }
-
-                            String updatedName = updatedNameBuilder.toString();
-
-                            GuildChannel channel = jda.getGuildChannelById(channelId);
-                            if (channel != null) {
-                                String currentName = channel.getName();
-
-                                if (!currentName.equals(updatedName))
-                                    channel.getManager().setName(updatedName).queue();
-                            } else log.warn("Channel ID {} not found in guild", channelId);
-                        }
-                    } catch (Exception e) {
-                        log.error("Error in channel tracking task", e);
-                    }
-                },
-                0,
-                15,
-                TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                for (ChannelTracking tracking : trackChannels) {
+                    updateChannel(jda, config, tracking);
+                }
+            } catch (Exception e) {
+                log.error("Error in channel tracking task", e);
+            }
+        }, 0, 15, TimeUnit.MINUTES);
     }
 
     public void stopTracking() {
         executor.shutdown();
+    }
+
+    private void updateChannel(JDA jda, BotConfig config, ChannelTracking tracking) {
+        String channelId = tracking.getChannelId();
+        String template = tracking.getName();
+
+        String newName = generateChannelName(template, config.getMetrics());
+
+        GuildChannel channel = jda.getGuildChannelById(channelId);
+
+        if (channel == null) {
+            log.error("Channel with ID {} not found in guild", channelId);
+            return;
+        }
+
+        String currentName = channel.getName();
+
+        if (!currentName.equals(newName)) {
+            channel.getManager().setName(newName).queue();
+        }
+    }
+
+    private String generateChannelName(String template, List<NamedQuery> metrics) {
+        String result = template;
+
+        for (NamedQuery metric : metrics) {
+            String placeholder = "{" + metric.getName() + "}";
+            if (result.contains(placeholder)) {
+                Double value = promFetcher.fetchLastValue(metric.getQuery());
+                String formatted = value == null ? "N/A" : FormatUtil.formatValue(value, metric.getFormat());
+                result = result.replace(placeholder, formatted);
+            }
+        }
+
+        return result;
     }
 }

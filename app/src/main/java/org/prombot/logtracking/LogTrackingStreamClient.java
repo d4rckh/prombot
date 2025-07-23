@@ -43,7 +43,7 @@ public class LogTrackingStreamClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        log.info("Connected to Loki WebSocket @ {}", this.getURI());
+        log.info("Connected to Loki WebSocket @ {}", this.getURI().getHost());
         this.opennedAt = Instant.now();
     }
 

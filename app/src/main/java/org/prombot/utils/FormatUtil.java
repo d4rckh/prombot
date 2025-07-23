@@ -19,7 +19,7 @@ public class FormatUtil {
             default:
                 // Default: just return value as string with 2 decimal places
                 return String.format("%.2f", value);
-        }
+            }
     }
 
     private static String formatDataSpeed(double bitsPerSecond) {
